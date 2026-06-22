@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-// 1. Types නිර්වචනය කිරීම
 type StoreDetails = {
   deliveryMethods: string[];
   customAttributes: string;
   deliveryCharge: string;
 };
 
-// Save සඳහා අවශ්‍ය පිරිසිදු කරන ලද දත්ත වර්ගය
 type FinalStoreSettings = {
   deliveryMethods: string[];
   customAttributes: string[];
   deliveryCharge: string;
 };
 
+
+
 const VendorDashboard = () => {
+  const navigate = useNavigate();
   const [hasStore, setHasStore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [storeName, setStoreName] = useState("Cherish Boutique");
   const [logo, setLogo] = useState<string | null>(null);
+  const [stats, setStats] = useState({ totalRevenue: 0, activeOrders: 0, productCount: 0, recentOrders: [] });
   
   const [storeDetails, setStoreDetails] = useState<StoreDetails>({
     deliveryMethods: [],
@@ -32,6 +35,38 @@ const VendorDashboard = () => {
   const [finalStoreSettings, setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
   const [suggestedAttributes, setSuggestedAttributes] = useState<string[]>([]);
 
+ const fetchDashboardStats = async () => {
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  try {
+    const res = await fetch("http://localhost:5000/api/v1/vendor/dashboard-stats", {
+      method: "GET",
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    
+    if (res.status === 404) {
+      console.error("Error 404: The requested URL was not found on the server.");
+      return;
+    }
+    
+    if (!res.ok) {
+      console.error(`Error: Received status ${res.status} from the server.`);
+      return;
+    }
+    
+    const result = await res.json();
+    setStats(result);
+  } catch (err) {
+    console.error("Connection Error: Unable to reach the server. Please ensure the backend is running.", err);
+  }
+};
+
+
+useEffect(() => {
+  fetchDashboardStats(); 
+}, []);
   
   useEffect(() => {
     const initDashboard = async () => {
@@ -283,17 +318,17 @@ const showNotification = (message: string, type: 'success' | 'error') => {
 )}
     
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        {[
-          { id: "rev", label: "Total Revenue", val: "LKR 24,500" },
-          { id: "ord", label: "Active Orders", val: 5 },
-          { id: "prod", label: "My Products", val: 12 }
-        ].map((item) => (
-          <div key={item.id} className="bg-white p-6 rounded-2xl border border-[#E6DFD3] shadow-sm">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#8B5E3C] mb-1">{item.label}</p>
-            <h3 className="text-2xl font-bold text-[#2D2A26]">{item.val}</h3>
-          </div>
-        ))}
-      </div>
+  {[
+    { label: "Total Revenue", val: `LKR ${stats.totalRevenue.toLocaleString()}` },
+    { label: "Active Orders", val: stats.activeOrders },
+    { label: "My Products", val: stats.productCount }
+  ].map((item, idx) => (
+    <div key={idx} className="bg-white p-6 rounded-2xl border border-[#E6DFD3] shadow-sm">
+      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#8B5E3C] mb-1">{item.label}</p>
+      <h3 className="text-2xl font-bold text-[#2D2A26]">{item.val}</h3>
+    </div>
+  ))}
+</div>
 
       <div className="bg-white p-8 rounded-[2rem] border border-[#E6DFD3] shadow-lg">
         <div className="flex justify-between items-center mb-8">
@@ -308,13 +343,24 @@ const showNotification = (message: string, type: 'success' | 'error') => {
                <th className="pb-4 text-right">Actions</th>
              </tr>
            </thead>
-           <tbody className="divide-y divide-[#E6DFD3]">
-              <tr className="hover:bg-[#FDFBF7] transition">
-                <td className="py-5 font-bold text-[#4A3728]">#CH-9481</td>
-                <td className="py-5 italic">Piyumalsha</td>
-                <td className="py-5 text-right"><button className="text-[#4A3728] font-bold text-sm underline">Review</button></td>
-              </tr>
-            </tbody>
+ <tbody className="divide-y divide-[#E6DFD3]">
+  {stats.recentOrders.map((order: any) => (
+    <tr key={order._id} className="hover:bg-[#FDFBF7] transition">
+      <td className="py-5 font-bold text-[#4A3728]">#{order.orderId}</td>
+      <td className="py-5 italic">
+        {order.customerId?.name || "Guest Customer"}
+      </td>
+      <td className="py-5 text-right">
+ <button 
+  onClick={() => navigate("/vendor/orders")}
+  className="text-[#4A3728] font-bold text-sm underline"
+>
+  View
+</button>
+      </td>
+    </tr>
+  ))}
+</tbody>
         </table>
       </div>
     </div>

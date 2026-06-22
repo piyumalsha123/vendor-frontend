@@ -151,6 +151,18 @@ const MyProducts = () => {
     }
   };
    
+const getSuggestions = (label: string) => {
+  const map: Record<string, string[]> = {
+    "Size": ["S", "M", "L", "XL", "XXL"],
+    "Gender": ["Male", "Female", "Unisex"],
+    "Color": ["Red", "Blue", "Green", "Black", "White"],
+    "Flavor": ["Chocolate", "Vanilla", "Strawberry"],
+    "Sweetness Level": ["Low", "Medium", "High"],
+    "Material": ["Cotton", "Silk", "Polyester", "Leather"]
+  };
+  return map[label] || [];
+};
+
   return (
     <div className="p-10 bg-[#ccba97] min-h-screen">
       <div className="flex justify-between items-center mb-10">
@@ -240,8 +252,17 @@ const MyProducts = () => {
                         ))}
                       </div>
                     ) : (
-                      <input className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl" onChange={(e) => setFormData({...formData, variants: {...formData.variants, [item.label]: e.target.value}})} />
-                    )}
+                      <>
+    <input 
+      list={`add-list-${index}`} 
+      className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl" 
+      onChange={(e) => setFormData({...formData, variants: {...formData.variants, [item.label]: e.target.value}})} 
+    />
+    <datalist id={`add-list-${index}`}>
+      {getSuggestions(item.label).map(opt => <option key={opt} value={opt} />)}
+    </datalist>
+  </>
+)}
                   </div>
                 );
               })}
@@ -337,113 +358,144 @@ const MyProducts = () => {
   </div>
 )}
 
-     {isEditModalOpen && selectedProduct && (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white p-8 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-          <h2 className="text-3xl font-black text-[#2D2A26] mb-6">Edit Product</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Product Title</label>
-              <input value={selectedProduct.title} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, title: e.target.value})} />
-            </div>
-            <div>
-              <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Description</label>
-              <textarea value={selectedProduct.description} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, description: e.target.value})} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Category</label>
-                <select value={selectedProduct.category} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, category: e.target.value})}>
-                  <option value="clothing">Clothing</option>
-  <option value="foods">Foods</option>
-  <option value="flowers">Flowers</option>
-  <option value="handmade">Handmade</option>
-  <option value="bakery">Other</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Price</label>
-                <input type="number" value={selectedProduct.price} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, price: Number(e.target.value)})} />
-              </div>
-            </div>
-            <div>
-              <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Stock</label>
-              <input type="number" value={selectedProduct.stock} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, stock: Number(e.target.value)})} />
-            </div>
-          <div className="p-4 bg-[#FDFBF7] border border-[#E6DFD3] rounded-2xl">
-  <label className="block text-sm font-bold text-[#2D2A26] mb-3">Product Attributes</label>
-  {storeAttrs.map((item, index) => {
-  
-    if (item.label.toLowerCase().includes("date")) {
-      return (
-        <div key={index} className="mb-4">
-          <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
-          <input type="date" className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl" 
-            onChange={(e) => setFormData({...formData, variants: {...formData.variants, [item.label]: e.target.value}})} />
+{isEditModalOpen && selectedProduct && (
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="bg-white p-8 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+      <h2 className="text-3xl font-black text-[#2D2A26] mb-6">Edit Product</h2>
+
+      <div className="space-y-4">
+        {/* Title */}
+        <div>
+          <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Product Title</label>
+          <input value={selectedProduct.title} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, title: e.target.value})} />
         </div>
-      );
-    }
 
-    const dropdownAttributes = ["Flavor", "Sweetness Level", "Material", "Color", "Gender", "Size"];
-    if (dropdownAttributes.includes(item.label)) {
-      const options = item.label === "Size" ? ["S", "M", "L", "XL"] : ["Option 1", "Option 2", "Option 3"]; 
-      return (
-        <div key={index} className="mb-4">
-          <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
-          <select className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl"
-            onChange={(e) => setFormData({...formData, variants: {...formData.variants, [item.label]: e.target.value}})}>
-            <option value="">Select {item.label}</option>
-            {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
+        {/* Description */}
+        <div>
+          <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Description</label>
+          <textarea value={selectedProduct.description} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, description: e.target.value})} />
         </div>
-      );
-    }
 
-    return (
-      <div key={index} className="mb-4">
-        <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
-        <input className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl" 
-          onChange={(e) => setFormData({...formData, variants: {...formData.variants, [item.label]: e.target.value}})} />
-      </div>
-    );
-  })}
-</div>
-    
-<div className="flex items-center gap-2 my-4">
-  <input 
-    type="checkbox" 
-    checked={isFreeDelivery} 
-    onChange={(e) => {
-      setIsFreeDelivery(e.target.checked);
-      if (e.target.checked) setFormData({...formData, deliveryCharge: 0});
-    }} 
-  />
-  <label className="text-sm font-bold text-[#2D2A26]">Free Delivery</label>
-</div>
+        {/* Category & Price */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Category</label>
+            <select value={selectedProduct.category} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, category: e.target.value})}>
+              <option value="clothing">Clothing</option>
+              <option value="foods">Foods</option>
+              <option value="flowers">Flowers</option>
+              <option value="handmade">Handmade</option>
+              <option value="bakery">Other</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Price</label>
+            <input type="number" value={selectedProduct.price} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, price: Number(e.target.value)})} />
+          </div>
+        </div>
 
-{!isFreeDelivery && (
-  <div>
-    <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Delivery Charge (LKR)</label>
+        {/* Stock */}
+        <div>
+          <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Stock</label>
+          <input type="number" value={selectedProduct.stock} className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setSelectedProduct({...selectedProduct, stock: Number(e.target.value)})} />
+        </div>
+
+        {/* Product Attributes */}
+        <div className="p-4 bg-[#FDFBF7] border border-[#E6DFD3] rounded-2xl">
+          <label className="block text-sm font-bold text-[#2D2A26] mb-3">Product Attributes</label>
+          {storeAttrs.map((item, index) => {
+            const currentVal = selectedProduct.variants?.[item.label] || "";
+
+            const getOptions = (label: string) => {
+              switch (label) {
+                case "Size": return ["S", "M", "L", "XL", "XXL"];
+                case "Gender": return ["Male", "Female", "Unisex"];
+                case "Color": return ["Red", "Blue", "Green", "Black", "White"];
+                case "Flavor": return ["Chocolate", "Vanilla", "Strawberry"];
+                case "Sweetness Level": return ["Low", "Medium", "High"];
+                case "Material": return ["Cotton", "Silk", "Polyester", "Leather"];
+                default: return [];
+              }
+            };
+
+            const options = getOptions(item.label);
+
+            if (item.label.toLowerCase().includes("date")) {
+              return (
+                <div key={index} className="mb-4">
+                  <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
+                  <input type="date" value={currentVal} className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl" 
+                    onChange={(e) => setSelectedProduct({...selectedProduct, variants: {...selectedProduct.variants, [item.label]: e.target.value}})} />
+                </div>
+              );
+            }
+
+            if (options.length > 0) {
+              return (
+                <div key={index} className="mb-4">
+                  <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
+                  <select value={currentVal} className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl"
+                    onChange={(e) => setSelectedProduct({...selectedProduct, variants: {...selectedProduct.variants, [item.label]: e.target.value}})}>
+                    <option value="">Select {item.label}</option>
+                    {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
+              );
+            }
+
+            return (
+  <div key={index} className="mb-4">
+    <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
     <input 
-      type="number" 
-      className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" 
-      onChange={(e) => setFormData({...formData, deliveryCharge: Number(e.target.value)})} 
+      list={`edit-list-${index}`} 
+      value={currentVal} 
+      className="w-full p-3 mt-1 border border-[#D4C4A8] rounded-xl" 
+      onChange={(e) => setSelectedProduct({...selectedProduct, variants: {...selectedProduct.variants, [item.label]: e.target.value}})} 
     />
+    <datalist id={`edit-list-${index}`}>
+      {getSuggestions(item.label).map(opt => <option key={opt} value={opt} />)}
+    </datalist>
+  </div>
+);
+          })}
+        </div>
+
+        {/* Delivery Options */}
+        <div className="flex items-center gap-2 my-4">
+          <input 
+            type="checkbox" 
+            checked={selectedProduct.deliveryCharge === 0} 
+            onChange={(e) => setSelectedProduct({...selectedProduct, deliveryCharge: e.target.checked ? 0 : 50})} 
+          />
+          <label className="text-sm font-bold text-[#2D2A26]">Free Delivery</label>
+        </div>
+
+        {selectedProduct.deliveryCharge > 0 && (
+          <div>
+            <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Delivery Charge (LKR)</label>
+            <input 
+              type="number" 
+              value={selectedProduct.deliveryCharge}
+              className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" 
+              onChange={(e) => setSelectedProduct({...selectedProduct, deliveryCharge: Number(e.target.value)})} 
+            />
+          </div>
+        )}
+
+        {/* File Upload */}
+        <div className="mt-4">
+          <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Change Product Image</label>
+          <input type="file" id="editImageInput" className="w-full mt-2" />
+        </div>
+      </div>
+
+      <div className="flex gap-3 mt-8">
+        <button onClick={() => setIsEditModalOpen(false)} className="flex-1 py-4 border-2 rounded-2xl font-bold">Cancel</button>
+        <button onClick={handleUpdate} className="flex-1 py-4 bg-[#2D2A26] text-white rounded-2xl font-bold">Save Changes</button>
+      </div>
+    </div>
   </div>
 )}
-
-<div className="mt-4">
-  <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Change Product Image </label>
-  <input type="file" id="imageInput" required className="w-full mt-2" />
-</div>
-          </div>
-          <div className="flex gap-3 mt-8">
-            <button onClick={() => setIsEditModalOpen(false)} className="flex-1 py-4 border-2 rounded-2xl font-bold">Cancel</button>
-            <button onClick={handleUpdate} className="flex-1 py-4 bg-[#2D2A26] text-white rounded-2xl font-bold">Save Changes</button>
-          </div>
-        </div>
-      </div>
-     )}
     </div>
   );
 };

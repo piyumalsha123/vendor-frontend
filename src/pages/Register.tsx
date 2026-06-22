@@ -114,97 +114,102 @@ const Register: React.FC = () => {
           </div>
         )}
 
-        <form className="space-y-3.5" onSubmit={handleRegister}>
-          <div className="space-y-3">
-            <div>
-              <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Full Name</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                placeholder="Piyumalsha Isurandi"
-                className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-              />
-            </div>
+  <form className="space-y-4" onSubmit={handleRegister}>
+  <div className="space-y-4">
+    {/* Full Name */}
+    <div>
+      <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Full Name</label>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        type="text"
+        placeholder="Piyumalsha Isurandi"
+        className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+      />
+    </div>
 
-            <div>
-              <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Email Address</label>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="example@domain.com"
-                className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-              />
-            </div>
+    
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Email Address</label>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          placeholder="example@domain.com"
+          className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+        />
+      </div>
+      <div>
+        <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Phone Number</label>
+        <input
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          type="text"
+          placeholder="0771234567"
+          className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+        />
+      </div>
+    </div>
 
-            <div>
-              <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Address</label>
-              <input
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                type="text"
-                placeholder="123, Galle Road, Colombo"
-                className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-              />
-            </div>
+    {/* Address */}
+    <div>
+      <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Address</label>
+      <input
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        type="text"
+        placeholder="123, Galle Road, Colombo"
+        className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+      />
+    </div>
 
-            {role === "VENDOR" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#EFE9DD]/60 rounded-xl border border-[#DFD6C6] animate-fadeIn">
-                <div>
-                  <label className="text-xs font-bold text-[#612705] block mb-1 uppercase tracking-wider">Store Name</label>
-                  <input
-                    value={storeName}
-                    onChange={(e) => setStoreName(e.target.value)}
-                    type="text"
-                    placeholder="your store name"
-                     className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-bold text-[#612705] block mb-1 uppercase tracking-wider">Contact Number</label>
-                  <input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    type="text"
-                    placeholder="0771234567"
-                     className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-                  />
-                </div>
-              </div>
-            )}
+    {role === "VENDOR" && (
+      <div className="p-3 bg-[#EFE9DD]/60 rounded-xl border border-[#DFD6C6] animate-fadeIn">
+        <label className="text-xs font-bold text-[#612705] block mb-1 uppercase tracking-wider">Store Name</label>
+        <input
+          value={storeName}
+          onChange={(e) => setStoreName(e.target.value)}
+          type="text"
+          placeholder="your store name"
+          className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+        />
+      </div>
+    )}
 
-            <div>
-              <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Password</label>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="••••••••"
-                 className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-              />
-            </div>
+  
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Password</label>
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="••••••••"
+          className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+        />
+      </div>
+      <div>
+        <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Confirm Password</label>
+        <input
+          value={conPassword}
+          onChange={(e) => setConPassword(e.target.value)}
+          type="password"
+          placeholder="••••••••"
+          className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
+        />
+      </div>
+    </div>
+  </div>
 
-            <div>
-              <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Confirm Password</label>
-              <input
-                value={conPassword}
-                onChange={(e) => setConPassword(e.target.value)}
-                type="password"
-                placeholder="••••••••"
-                 className="w-full px-3.5 py-2 border border-[#C4B9AC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D2A26]/20 focus:border-[#2D2A26] bg-[#FCFAFA] text-sm text-gray-900 font-medium placeholder-gray-400 shadow-sm"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full mt-2 py-2.5 bg-[#2D2A26] hover:bg-[#413D39] text-[#F9F6F0] text-sm font-bold uppercase tracking-wider rounded-xl transition shadow-md disabled:bg-gray-400 transform active:scale-[0.98]"
-          >
-            {loading ? "Registering..." : `Register as ${role}`}
-          </button>
-        </form>
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full mt-4 py-3 bg-[#2D2A26] hover:bg-[#413D39] text-[#F9F6F0] text-sm font-bold uppercase tracking-wider rounded-xl transition shadow-md disabled:bg-gray-400 transform active:scale-[0.98]"
+  >
+    {loading ? "Registering..." : `Register as ${role}`}
+  </button>
+</form>
 
         <p className="text-xs text-gray-600 text-center mt-4 font-medium tracking-wide">
           Already have an account?{" "}
