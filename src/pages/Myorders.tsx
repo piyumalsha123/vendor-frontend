@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
 import { FaTrash } from 'react-icons/fa';
 
 const MyOrders = () => {
@@ -27,7 +27,6 @@ const MyOrders = () => {
     finally { setLoading(false); }
   };
 
-  // Status වල වර්ණ තීරණය කරන helper
   const getStatusStyle = (status: string) => {
     switch(status.toLowerCase()) {
       case 'pending': return 'bg-yellow-100 text-yellow-700';
@@ -83,7 +82,7 @@ const MyOrders = () => {
         </table>
       </div>
 
-      {/* Modal කොටස */}
+      
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
           <div className="bg-[#FDFBF7] p-8 rounded-3xl w-full max-w-lg shadow-2xl border border-[#D4C4A8]">

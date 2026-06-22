@@ -18,25 +18,22 @@ const CustomerDashboard = () => {
     white: "#FFFFFF",
   };
 
-  // 1. Debounce state එකක් එක් කරන්න
 const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
-// 2. අකුරු ටයිප් කරන විට delay එකක් තබා search කිරීම
 useEffect(() => {
     const handler = setTimeout(() => {
         setDebouncedSearch(searchTerm);
-    }, 500); // මිලි තත්පර 500ක් ඉන්නවා
+    }, 500); 
 
     return () => clearTimeout(handler);
 }, [searchTerm]);
 
-// 3. දැන් මේ useEffect එක හරහා දත්ත Fetch කරන්න
 useEffect(() => {
     fetchProducts();
 }, [debouncedSearch, selectedCategory]); 
 
 const fetchProducts = async () => {
-    // API එකට අලුත් search term එක යනවා
+    
     const url = `http://localhost:5000/api/v1/products/public-products?search=${debouncedSearch}&category=${selectedCategory}`;
     const res = await fetch(url);
     const result = await res.json();
@@ -59,8 +56,8 @@ const fetchProducts = async () => {
   };
 
   const filteredProducts = products.filter((p) => {
-    const searchLower = searchTerm.toLowerCase().trim(); // මෙතන trim() එක් කරන්න
-    const titleLower = p.title.toLowerCase().trim();     // මෙතනත් trim() එක් කරන්න
+    const searchLower = searchTerm.toLowerCase().trim();
+    const titleLower = p.title.toLowerCase().trim();    
     
     const matchesSearch = 
         titleLower.includes(searchLower) || 
@@ -83,7 +80,7 @@ const fetchProducts = async () => {
           </div>
          
 <div className="relative w-full max-w-md">
-  {/* අයිකනය */}
+ 
   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
     <span className="text-gray-400">🔍</span>
   </div>
@@ -101,7 +98,6 @@ const fetchProducts = async () => {
     onChange={(e) => setSearchTerm(e.target.value)}
   />
 
-  {/* Clear Button - ටයිප් කරන දේ මකා දැමීමට */}
   {searchTerm && (
     <button 
       onClick={() => setSearchTerm("")} 
@@ -142,13 +138,12 @@ const fetchProducts = async () => {
   
   <h2 className="text-3xl font-black mt-4">{selectedProduct.title}</h2>
   
-  {/* Description Section */}
+ 
   <div className="mt-4">
     <h4 className="text-xs font-black uppercase text-gray-400">Description</h4>
     <p className="text-gray-700 text-sm mt-1">{selectedProduct.description}</p>
   </div>
 
-  {/* Price & Delivery */}
   <div className="flex flex-col gap-2 mt-4 font-bold text-[#8B5E3C]">
     <p className="text-2xl">LKR {selectedProduct.price.toLocaleString()}</p>
     <p className="text-sm">• Stock: {selectedProduct.stock}</p>
@@ -161,7 +156,6 @@ const fetchProducts = async () => {
     </div>
   </div>
 
-  {/* Dynamic Variants Selection */}
   <div className="mt-6 space-y-4">
     {Object.entries(selectedProduct.variants || {}).map(([key, val]: any) => (
       <div key={key}>

@@ -10,7 +10,7 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [conPassword, setConPassword] = useState("");
-  const [address, setAddress] = useState(""); // අලුතින් එකතු කළා
+  const [address, setAddress] = useState(""); 
   const [role, setRole] = useState<"CUSTOMER" | "VENDOR">("CUSTOMER");
   const [storeName, setStoreName] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,7 +34,6 @@ const Register: React.FC = () => {
     try {
       setLoading(true);
      
-      // ඔබේ service එකට address එකත් යවන්න
       await register(
         name,
         email,
@@ -139,7 +138,6 @@ const Register: React.FC = () => {
               />
             </div>
 
-            {/* අලුතින් එකතු කළ Address Field එක */}
             <div>
               <label className="text-xs font-bold text-[#4E4A45] block mb-1 uppercase tracking-wider">Address</label>
               <input

@@ -23,11 +23,11 @@ const MyProducts = () => {
 
   const fetchProducts = async () => {
   try {
-    const res = await fetch("http://localhost:5000/api/v1/products/my-products", { // Route එක මෙතන නිවැරදි කරන්න
+    const res = await fetch("http://localhost:5000/api/v1/products/my-products", { 
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
     });
     const result = await res.json();
-    console.log("Products:", result); // මෙය console එකේ පරීක්ෂා කරන්න
+    console.log("Products:", result); 
     if (res.ok) setProducts(result.data);
   } catch (err) { console.error(err); }
 };
@@ -66,7 +66,7 @@ const MyProducts = () => {
  const deleteProduct = async (id: string) => {
   if (!confirm("Are you sure?")) return;
   try {
-    // මෙතන URL එකට '/delete/' එකතු කරන්න
+   
     const res = await fetch(`http://localhost:5000/api/v1/products/delete/${id}`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
@@ -246,20 +246,20 @@ const MyProducts = () => {
                 );
               })}
             </div>
-          {/* Free Delivery Toggle */}
+        
 <div className="flex items-center gap-2 my-4">
   <input 
     type="checkbox" 
     checked={isFreeDelivery} 
     onChange={(e) => {
       setIsFreeDelivery(e.target.checked);
-      if (e.target.checked) setFormData({...formData, deliveryCharge: 0}); // Free නම් charge එක 0 කරයි
+      if (e.target.checked) setFormData({...formData, deliveryCharge: 0}); 
     }} 
   />
   <label className="text-sm font-bold text-[#2D2A26]">Free Delivery</label>
 </div>
 
-{/* Delivery Charge Input (isFreeDelivery බොරු නම් පමණක් පෙන්වයි) */}
+
 {!isFreeDelivery && (
   <div>
     <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Delivery Charge (LKR)</label>
@@ -271,8 +271,6 @@ const MyProducts = () => {
   </div>
 )}
 
-
-{/* Image එක අනිවාර්ය කිරීමට (Required) */}
 <div className="mt-4">
   <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Product Image (Required)</label>
   <input type="file" id="imageInput" required className="w-full mt-2" />
@@ -286,7 +284,7 @@ const MyProducts = () => {
       </div>
      )}
 
-     {/* VIEW MODAL */}
+   
 {viewProduct && (
   <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
     <div className="bg-white p-8 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
@@ -339,7 +337,6 @@ const MyProducts = () => {
   </div>
 )}
 
-     {/* EDIT MODAL */}
      {isEditModalOpen && selectedProduct && (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div className="bg-white p-8 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
@@ -376,7 +373,7 @@ const MyProducts = () => {
           <div className="p-4 bg-[#FDFBF7] border border-[#E6DFD3] rounded-2xl">
   <label className="block text-sm font-bold text-[#2D2A26] mb-3">Product Attributes</label>
   {storeAttrs.map((item, index) => {
-    // 1. Date තෝරාගන්නා Attributes
+  
     if (item.label.toLowerCase().includes("date")) {
       return (
         <div key={index} className="mb-4">
@@ -387,10 +384,9 @@ const MyProducts = () => {
       );
     }
 
-    // 2. Dropdown (Select) අවශ්‍ය Attributes
     const dropdownAttributes = ["Flavor", "Sweetness Level", "Material", "Color", "Gender", "Size"];
     if (dropdownAttributes.includes(item.label)) {
-      const options = item.label === "Size" ? ["S", "M", "L", "XL"] : ["Option 1", "Option 2", "Option 3"]; // මෙතනට ඔබේ options ගන්න
+      const options = item.label === "Size" ? ["S", "M", "L", "XL"] : ["Option 1", "Option 2", "Option 3"]; 
       return (
         <div key={index} className="mb-4">
           <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
@@ -403,7 +399,6 @@ const MyProducts = () => {
       );
     }
 
-    // 3. සාමාන්‍ය Text Input
     return (
       <div key={index} className="mb-4">
         <label className="text-[10px] font-black uppercase text-[#8B5E3C]">{item.label}</label>
@@ -413,20 +408,19 @@ const MyProducts = () => {
     );
   })}
 </div>
-      {/* Free Delivery Toggle */}
+    
 <div className="flex items-center gap-2 my-4">
   <input 
     type="checkbox" 
     checked={isFreeDelivery} 
     onChange={(e) => {
       setIsFreeDelivery(e.target.checked);
-      if (e.target.checked) setFormData({...formData, deliveryCharge: 0}); // Free නම් charge එක 0 කරයි
+      if (e.target.checked) setFormData({...formData, deliveryCharge: 0});
     }} 
   />
   <label className="text-sm font-bold text-[#2D2A26]">Free Delivery</label>
 </div>
 
-{/* Delivery Charge Input (isFreeDelivery බොරු නම් පමණක් පෙන්වයි) */}
 {!isFreeDelivery && (
   <div>
     <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Delivery Charge (LKR)</label>
@@ -438,7 +432,6 @@ const MyProducts = () => {
   </div>
 )}
 
-{/* Image එක අනිවාර්ය කිරීමට (Required) */}
 <div className="mt-4">
   <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Change Product Image </label>
   <input type="file" id="imageInput" required className="w-full mt-2" />

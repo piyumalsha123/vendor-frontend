@@ -22,7 +22,6 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Vendor Routes */}
         <Route
           path="/vendor"
           element={
@@ -36,7 +35,6 @@ const Router = () => {
           <Route path="orders" element={<OrderList />} />
         </Route>
 
-        {/* Customer Routes */}
         <Route
           path="/customer"
           element={

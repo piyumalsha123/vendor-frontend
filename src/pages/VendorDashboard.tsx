@@ -32,7 +32,7 @@ const VendorDashboard = () => {
   const [finalStoreSettings, setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
   const [suggestedAttributes, setSuggestedAttributes] = useState<string[]>([]);
 
-  // දත්ත ආරම්භ කිරීම (Fetch Data)
+  
   useEffect(() => {
     const initDashboard = async () => {
       setLoading(true);
@@ -46,7 +46,6 @@ const VendorDashboard = () => {
   setHasStore(true);
   setSelectedCategory(data.category);
   
-  // Database එකේ Array එකක් එන නිසා සෘජුවම join කරන්න හෝ state එක වෙනස් කරන්න
   setStoreDetails({
     ...data.settings,
     customAttributes: Array.isArray(data.settings.customAttributes) 
@@ -59,7 +58,7 @@ const VendorDashboard = () => {
       } catch (err) {
         console.error("Dashboard error:", err);
       } finally {
-        setLoading(false); // මෙතනදී loading false කිරීම අනිවාර්යයි
+        setLoading(false); 
       }
     };
 
@@ -114,7 +113,6 @@ const VendorDashboard = () => {
 
 const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
 
-// පණිවිඩය පෙන්වා තත්පර 3කින් එය අතුරුදහන් වීමට
 const showNotification = (message: string, type: 'success' | 'error') => {
   setNotification({ message, type });
   setTimeout(() => setNotification(null), 3000);
@@ -125,8 +123,7 @@ const showNotification = (message: string, type: 'success' | 'error') => {
   if (!hasStore) {
   return (
     <div className="min-h-screen bg-[#FDFBF7] flex flex-col items-center justify-center p-8 relative">
-      
-      {/* මෙතැනටත් Notification එක දාන්න, එවිට Store එකක් නැති වෙලාවටත් errors පෙන්නනවා */}
+     
       {notification && (
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -179,14 +176,13 @@ const showNotification = (message: string, type: 'success' | 'error') => {
 </button>
       </header>
 
-      {/* Modal */}
 {isEditModalOpen && (
   <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
     <div className="bg-white p-8 rounded-3xl w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
       <h2 className="text-2xl font-bold mb-6 text-[#2D2A26]">Store Configuration</h2>
       
       <div className="space-y-6">
-        {/* Attributes Section */}
+       
 
 <div className="mt-4">
   <label className="block text-sm font-bold mb-2 text-[#4A3728]">Store Attributes:</label>
@@ -224,7 +220,7 @@ const showNotification = (message: string, type: 'success' | 'error') => {
     })}
   </div>
 </div>
-    {/* Delivery Options */}
+   
         <div>
           <label className="block text-sm font-bold mb-2 text-[#4A3728]">Delivery Methods:</label>
           <div className="grid grid-cols-2 gap-2">
@@ -244,10 +240,8 @@ const showNotification = (message: string, type: 'success' | 'error') => {
         <button onClick={() => setIsEditModalOpen(false)} className="flex-1 py-3 border rounded-xl font-bold">Cancel</button>
  <button 
   onClick={async () => {
-    // 1. Attributes ටික Array එකක් විදිහට හදාගන්න
-    const attributesArray = storeDetails.customAttributes.split(",").map(s => s.trim()).filter(Boolean);
     
-    // 2. Backend එකට යවන Payload එක
+    const attributesArray = storeDetails.customAttributes.split(",").map(s => s.trim()).filter(Boolean);
     const payload = {
         ...storeDetails,
         customAttributes: attributesArray
@@ -264,7 +258,7 @@ const showNotification = (message: string, type: 'success' | 'error') => {
         });
 
         if (res.ok) {
-            // 3. සාර්ථක නම් Notification එක පෙන්වන්න
+           
             setFinalStoreSettings({
                 ...storeDetails,
                 customAttributes: attributesArray
@@ -272,7 +266,7 @@ const showNotification = (message: string, type: 'success' | 'error') => {
             setIsEditModalOpen(false);
             showNotification("Store details saved successfully!", "success");
         } else {
-            // 4. දෝෂයක් ඇත්නම් Notification එක පෙන්වන්න
+           
             showNotification("Failed to save settings. Please try again.", "error");
         }
     } catch (err) {
@@ -287,7 +281,7 @@ const showNotification = (message: string, type: 'success' | 'error') => {
     </div>
   </div>
 )}
-      {/* Stats Cards */}
+    
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         {[
           { id: "rev", label: "Total Revenue", val: "LKR 24,500" },
@@ -301,7 +295,6 @@ const showNotification = (message: string, type: 'success' | 'error') => {
         ))}
       </div>
 
-      {/* Recent Orders Table */}
       <div className="bg-white p-8 rounded-[2rem] border border-[#E6DFD3] shadow-lg">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-xl font-bold text-[#2D2A26]">Recent Orders</h2>

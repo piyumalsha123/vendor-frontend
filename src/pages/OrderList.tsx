@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Package, CheckCircle, XCircle, Truck, Clock, Filter, AlertCircle } from 'lucide-react';
+import  { useState, useEffect } from 'react';
+import {  CheckCircle, XCircle, Truck, Clock, Filter, AlertCircle } from 'lucide-react';
 
 const VendorOrders = () => {
   const [orders, setOrders] = useState<any[]>([]);
@@ -62,7 +62,7 @@ const VendorOrders = () => {
         </div>
       </div>
 
-      {/* Orders Table */}
+     
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <table className="w-full text-left">
           <thead className="bg-gray-50/50">

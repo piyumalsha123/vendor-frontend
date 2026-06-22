@@ -10,10 +10,10 @@ const Cart = () => {
   const [showModal, setShowModal] = useState(false);
 
   const colors = {
-    background: "#DBCEA5", // Creamy paper tone
-    primary: "#5A4A42",    // Deep coffee brown
-    textMain: "#3E362E",   // Dark charcoal brown
-    accent: "#A89F91",     // Muted taupe
+    background: "#DBCEA5", 
+    primary: "#5A4A42",    
+    textMain: "#3E362E",   
+    accent: "#A89F91",     
   };
 
   const toggleSelect = (index: number) => {
@@ -34,18 +34,18 @@ const Cart = () => {
     setIsProcessing(true);
 
     try {
-        // සියලුම තෝරාගත් භාණ්ඩ එකම Order එකකට සකසන්න
+       
         const orderData = {
             items: selectedItems.map((index: number) => {
                 const item = cart[index];
                 return {
                     productId: item._id,
-                    vendorId: item.vendorId, // අනිවාර්යයෙන්ම මෙය තිබිය යුතුයි
+                    vendorId: item.vendorId, 
                     title: item.title,
                     price: parseFloat(item.price),
                     quantity: item.quantity || 1,
                     images: item.images,
-                    status: 'pending' // item මට්ටමේ status
+                    status: 'pending'
                 };
             }),
             totalPrice: totalPrice,
@@ -59,7 +59,7 @@ const Cart = () => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` 
             },
-            body: JSON.stringify(orderData) // එකම request එකයි
+            body: JSON.stringify(orderData) 
         });
 
         if (!response.ok) throw new Error("Failed to place order");

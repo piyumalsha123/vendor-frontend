@@ -59,7 +59,7 @@ const Wishlist = () => {
         )}
       </div>
 
-      {/* Modal Section */}
+  
       <AnimatePresence>
         {selectedProduct && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedProduct(null)}>
@@ -112,7 +112,7 @@ const Wishlist = () => {
         )}
       </AnimatePresence>
 
-      {/* Full Image Preview */}
+   
       {fullImage && (
         <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4" onClick={() => setFullImage(null)}>
           <img src={fullImage} className="max-w-full max-h-screen object-contain" />

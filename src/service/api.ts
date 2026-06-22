@@ -18,6 +18,5 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// api.interceptors.response
 
 export default api

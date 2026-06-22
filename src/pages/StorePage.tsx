@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,7 +19,7 @@ const StorePage = () => {
     fetch(`http://localhost:5000/api/v1/products?vendorId=${vendorId}`)
   ]);
   const storeData = await storeRes.json();
-  console.log("Store Data:", storeData); // මේක බලන්න Console එකේ
+  console.log("Store Data:", storeData); 
   setStore(storeData);
   setProducts(await prodRes.json());
 };
@@ -35,7 +35,7 @@ const StorePage = () => {
 
   return (
     <div className="min-h-screen bg-[#c5a67e] pb-20">
-      {/* Header with Decorative Background */}
+     
       <div className="bg-[#2D2A26] text-white p-10 rounded-b-[3rem] shadow-2xl">
         <button onClick={() => navigate(-1)} className="mb-6 font-bold opacity-70 hover:opacity-100 transition">← Back</button>
         <h1 className="text-5xl font-black">{store.storeName}</h1>
@@ -63,7 +63,6 @@ const StorePage = () => {
         ))}
       </div>
 
-      {/* Product Detail Modal */}
       <AnimatePresence>
         {selectedProduct && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedProduct(null)}>
@@ -84,7 +83,6 @@ const StorePage = () => {
                  )}
               </div>
 
-              {/* Variants */}
               <div className="mt-6 space-y-4">
                 {Object.entries(selectedProduct.variants || {}).map(([key, val]: any) => (
                   <div key={key}>
@@ -104,7 +102,7 @@ const StorePage = () => {
         )}
       </AnimatePresence>
 
-      {/* Full Image Preview */}
+     
       {fullImage && (
         <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4">
           <button onClick={() => setFullImage(null)} className="absolute top-10 right-10 text-white text-4xl font-bold">✕</button>

@@ -32,7 +32,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         { name: "Profile", path: "/customer/profile" },
       ];
 
-  // Medium Earthy Vintage Palette (Refined)
   const asideBg = isVendor ? "bg-[#3D352A]" : "bg-[#EBE5D6]";
   const textColor = isVendor ? "text-[#F5E6CA]" : "text-[#4A3728]";
   const subTextColor = isVendor ? "text-[#A89F91]" : "text-[#8B5E3C]";
@@ -46,7 +45,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <div className="flex h-screen bg-[#FAF9F6]">
       <aside className={`w-72 ${asideBg} p-8 flex flex-col justify-between shadow-2xl`}>
         <div>
-          {/* Smart Profile Section */}
+        
           <div className="mb-12 border-b border-[#6A5D54]/30 pb-8 flex flex-col items-center">
             <div className="w-20 h-20 rounded-full bg-[#5C5048] flex items-center justify-center text-white text-3xl font-black mb-4 shadow-lg border-2 border-[#D4A373]">
               {user?.name?.charAt(0).toUpperCase() || "U"}
