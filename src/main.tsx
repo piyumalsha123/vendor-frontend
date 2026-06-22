@@ -4,7 +4,7 @@ import "./index.css"
 import App from "./App.tsx"
 import { Provider } from "react-redux"
 import { store } from "./redux/store.ts"
-import { CartProvider } from "./context/CartContext" // CartProvider එක import කරන්න
+import { CartProvider } from "./context/CartContext" 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
