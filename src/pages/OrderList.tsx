@@ -25,33 +25,33 @@ const VendorOrders = () => {
   }
 };
 
- const fetchCustomerDetails = async (customerId: string) => {
-  if (!customerId) {
-    console.error("No Customer ID provided!");
-    alert("Error: Customer ID not found.");
-    return;
-  }
+//  const fetchCustomerDetails = async (customerId: string) => {
+//   if (!customerId) {
+//     console.error("No Customer ID provided!");
+//     alert("Error: Customer ID not found.");
+//     return;
+//   }
   
-  console.log("Attempting to fetch details for ID:", customerId);
+//   console.log("Attempting to fetch details for ID:", customerId);
   
-  try {
-    const response = await fetch(`http://localhost:5000/api/v1/user/details/${customerId}`, {
-      headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
-    });
+//   try {
+//     const response = await fetch(`http://localhost:5000/api/v1/user/details/${customerId}`, {
+//       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
+//     });
     
-    if (!response.ok) {
-      throw new Error(`Server responded with ${response.status}`);
-    }
+//     if (!response.ok) {
+//       throw new Error(`Server responded with ${response.status}`);
+//     }
     
-    const data = await response.json();
-    console.log("API Response Data:", data); 
+//     const data = await response.json();
+//     console.log("API Response Data:", data); 
    
-    setSelectedCustomer(data); 
-  } catch (err) {
-    console.error("Fetch Error:", err);
-    alert("Failed to fetch customer details. Check console for details.");
-  }
-};
+//     setSelectedCustomer(data); 
+//   } catch (err) {
+//     console.error("Fetch Error:", err);
+//     alert("Failed to fetch customer details. Check console for details.");
+//   }
+// };
 
   const updateStatus = async (orderId: string, status: string) => {
     try {

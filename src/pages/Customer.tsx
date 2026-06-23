@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllCustomer, saveCustomer } from '../service/customer'
 
 const Customer = () => {
@@ -28,17 +28,20 @@ const Customer = () => {
     //   })
   }, [])
 
-  const handleOnSave = async () => {
+ const handleOnSave = async () => {
     try {
-      const customer = {
-        name,
-        age,
-        isAdmin
-      }
-      const res = await saveCustomer(customer)
-      console.log("Saved")
-      alert("saved")
-    } catch (err) {}
+      const customer = { name, age, isAdmin };
+      await saveCustomer(customer); 
+      
+      alert("saved");
+      await fetchCustomers(); 
+      
+      setName("");
+      setAge(0);
+      setIsAdmin(false);
+    } catch (err) {
+      console.error("Save failed", err);
+    }
   }
 
   return (
@@ -58,8 +61,7 @@ const Customer = () => {
         />
         <input
           checked={isAdmin}
-          onChange={(e) => setIsAdmin(!isAdmin)}
-          // e.target.checked
+          onChange={(e) => setIsAdmin(e.target.checked)}
           type="checkbox"
           placeholder="is admin"
         />

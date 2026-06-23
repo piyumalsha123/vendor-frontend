@@ -32,7 +32,7 @@ const VendorDashboard = () => {
     deliveryCharge: ""
   });
 
-  const [ setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
+  // const [ setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
   const [suggestedAttributes, setSuggestedAttributes] = useState<string[]>([]);
 
  const fetchDashboardStats = async () => {
