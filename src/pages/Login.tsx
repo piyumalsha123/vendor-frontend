@@ -15,14 +15,15 @@ const Login = () => {
     if (e) e.preventDefault();
     try {
       const loginData = await login(email, password);
-      const accessToken = loginData?.data?.accessToken;
+      // මෙතැන Log එකක් දමන්න, data ලැබෙනවාදැයි බැලීමට
+      console.log("Login Response:", loginData); 
       
-      const userData = loginData?.data; 
+      const accessToken = loginData?.accessToken || loginData?.data?.accessToken;
+      const userData = loginData?.user || loginData?.data; 
 
       if (!accessToken) return alert("Login failed - No token received");
       
       localStorage.setItem("ACCESS_TOKEN", accessToken);
-     
       localStorage.setItem("user", JSON.stringify(userData)); 
 
       setUser(userData); 
@@ -31,9 +32,17 @@ const Login = () => {
         ? "/vendor/dashboard" 
         : "/customer/dashboard";
       
-    } catch (err) {
-      console.error("LOGIN ERROR:", err);
-      alert("Login failed!");
+    } catch (err: any) {
+      // දෝෂය සවිස්තරාත්මකව බැලීමට මෙය උදව් වේ
+      if (err.response) {
+        console.error("Server Error:", err.response.data);
+        alert(`Login failed: ${err.response.data.message || "Invalid credentials"}`);
+      } else if (err.request) {
+        console.error("Network Error - No response:", err.request);
+        alert("Network Error: Could not connect to the server. Please check your internet or HTTPS settings.");
+      } else {
+        console.error("Error:", err.message);
+      }
     }
   };
 
