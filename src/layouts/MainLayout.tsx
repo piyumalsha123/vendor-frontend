@@ -22,7 +22,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         { name: "Dashboard", path: "/vendor/dashboard" },
         { name: "My Products", path: "/vendor/products" },
         { name: "Orders", path: "/vendor/orders" },
-        { name: "Store Settings", path: "/vendor/settings" },
+        { name: "Store Settings", path: "/vendor/store-settings" },
       ]
     : [
         { name: "Marketplace", path: "/customer/dashboard" },

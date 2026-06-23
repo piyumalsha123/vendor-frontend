@@ -32,7 +32,7 @@ const VendorDashboard = () => {
     deliveryCharge: ""
   });
 
-  const [finalStoreSettings, setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
+  const [ setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
   const [suggestedAttributes, setSuggestedAttributes] = useState<string[]>([]);
 
  const fetchDashboardStats = async () => {
@@ -69,33 +69,38 @@ useEffect(() => {
 }, []);
   
   useEffect(() => {
-    const initDashboard = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("http://localhost:5000/api/v1/store/check", {
-          headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
-        });
-        const data = await res.json();
+    
+const initDashboard = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch("http://localhost:5000/api/v1/store/check", {
+      headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
+    });
+    const data = await res.json();
 
-       if (res.ok && data.hasStore) {
-  setHasStore(true);
-  setSelectedCategory(data.category);
-  
-  setStoreDetails({
-    ...data.settings,
-    customAttributes: Array.isArray(data.settings.customAttributes) 
-      ? data.settings.customAttributes.join(", ") 
-      : data.settings.customAttributes
-  });
-
-  if (data.category) fetchSuggestedAttributes(data.category);
-}
-      } catch (err) {
-        console.error("Dashboard error:", err);
-      } finally {
-        setLoading(false); 
+    if (res.ok && data.hasStore) {
+      setHasStore(true);
+      setSelectedCategory(data.category);
+    
+      if (data.logo) {
+        setLogo(data.logo); 
       }
-    };
+      
+      setStoreDetails({
+        ...data.settings,
+        customAttributes: Array.isArray(data.settings.customAttributes) 
+          ? data.settings.customAttributes.join(", ") 
+          : data.settings.customAttributes
+      });
+
+      if (data.category) fetchSuggestedAttributes(data.category);
+    }
+  } catch (err) {
+    console.error("Dashboard error:", err);
+  } finally {
+    setLoading(false); 
+  }
+};
 
     initDashboard();
     
@@ -144,13 +149,60 @@ useEffect(() => {
     }
   };
 
-  const categories = ["Clothing", "Cakes", "Handmade Flowers", "Floral Arrangements", "Plants", "Bakery & Sweets", "Healthy Snacks", "Handmade Candles", "Home Decor", "Resin & Craft Art", "Personalized Gifts", "Handmade Soaps", "Beauty & Organic", "Stationery & Journals", "Fabric Bags", "Jewelry & Accessories", "Hand-painted Pottery", "Greeting Cards", "Gift Hampers", "Essential Oil Rollers", "Macrame Wall Decor", "Customized Mugs", "Hair Care Products", "Other"];
+const categories = ["Clothing", "Cakes", "Handmade Flowers", "Floral Arrangements", "Plants", "Bakery & Sweets", "Healthy Snacks", "Handmade Candles", "Home Decor", "Resin & Craft Art", "Personalized Gifts", "Handmade Soaps", "Beauty & Organic", "Stationery & Journals", "Fabric Bags", "Jewelry & Accessories", "Hand-painted Pottery", "Greeting Cards", "Gift Hampers", "Essential Oil Rollers", "Macrame Wall Decor", "Customized Mugs", "Hair Care Products", "Other"];
 
 const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
 
 const showNotification = (message: string, type: 'success' | 'error') => {
   setNotification({ message, type });
   setTimeout(() => setNotification(null), 3000);
+};
+const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("logo", file);
+
+  try {
+    const res = await fetch("http://localhost:5000/api/v1/store/upload-logo", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (data.imageUrl) {
+        const newLogoUrl = data.imageUrl; 
+        
+        const saveRes = await fetch("http://localhost:5000/api/v1/store/save", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` 
+          },
+          body: JSON.stringify({ 
+            logo: newLogoUrl, 
+            customAttributes: storeDetails.customAttributes.split(",").map(s => s.trim()),
+            deliveryMethods: storeDetails.deliveryMethods,
+            category: selectedCategory
+          })
+        });
+
+        if (saveRes.ok) {
+            setLogo(newLogoUrl);
+            showNotification("Logo saved successfully!", "success");
+        } else {
+            showNotification("Failed to save to database", "error");
+        }
+    } else {
+        console.error("Backend response did not contain imageUrl", data);
+    }
+  } catch (err) {
+    console.error("Upload error:", err);
+    showNotification("Error uploading logo", "error");
+  }
 };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -192,9 +244,21 @@ const showNotification = (message: string, type: 'success' | 'error') => {
     <div className="min-h-screen bg-[#FDFBF7] p-8 font-sans text-[#2D2A26]">
       <header className="mb-12 flex flex-col md:flex-row items-start md:items-center justify-between border-b pb-8 gap-6 border-[#D4C4A8]">
         <div className="flex items-center gap-6">
-          <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#D4C4A8] flex items-center justify-center bg-[#F3EFE7] overflow-hidden">
-            {logo ? <img src={logo} alt="Logo" className="w-full h-full object-cover" /> : <span className="text-[10px] text-[#8B5E3C]">Logo</span>}
-          </div>
+          <label className="cursor-pointer group relative">
+  <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#D4C4A8] flex items-center justify-center bg-[#F3EFE7] overflow-hidden hover:border-[#8B5E3C] transition">
+    {logo ? (
+      <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+    ) : (
+      <span className="text-[10px] text-[#8B5E3C]">Upload</span>
+    )}
+  </div>
+  <input 
+    type="file" 
+    className="hidden" 
+    accept="image/*" 
+    onChange={handleLogoUpload} 
+  />
+</label>
           <div>
             <p className="text-[#8B5E3C] text-sm uppercase tracking-[0.2em] font-bold">Category: {selectedCategory || "Not Set"} </p>
              <h1 className="text-4xl font-black text-[#4A3728]">{storeName}</h1>
@@ -293,11 +357,6 @@ const showNotification = (message: string, type: 'success' | 'error') => {
         });
 
         if (res.ok) {
-           
-            setFinalStoreSettings({
-                ...storeDetails,
-                customAttributes: attributesArray
-            });
             setIsEditModalOpen(false);
             showNotification("Store details saved successfully!", "success");
         } else {

@@ -12,6 +12,7 @@ import Wishlist from "../pages/Wishlist";
 import MyOrders from "../pages/Myorders";
 import StorePage from "../pages/StorePage";
 import Profile from "../pages/Profile";
+import StoreSettings from "../pages/StoreSettings";
 
 const Router = () => {
   return (
@@ -33,6 +34,7 @@ const Router = () => {
           <Route path="dashboard" element={<VendorDashboard />} />
           <Route path="products" element={<ProductList />} />
           <Route path="orders" element={<OrderList />} />
+          <Route path="store-settings" element={<StoreSettings />} />
         </Route>
 
         <Route
