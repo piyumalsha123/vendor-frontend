@@ -8,11 +8,11 @@ type StoreDetails = {
   deliveryCharge: string;
 };
 
-type FinalStoreSettings = {
-  deliveryMethods: string[];
-  customAttributes: string[];
-  deliveryCharge: string;
-};
+// type FinalStoreSettings = {
+//   deliveryMethods: string[];
+//   customAttributes: string[];
+//   deliveryCharge: string;
+// };
 
 
 
@@ -216,7 +216,7 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className={`fixed top-5 right-5 z-[100] px-6 py-4 rounded-xl shadow-2xl font-bold flex items-center gap-3 ${
+          className={`fixed top-5 right-5 z-[] px-6 py-4 rounded-xl shadow-2xl font-bold flex items-center gap-3 ${
             notification.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
           }`}
         >
