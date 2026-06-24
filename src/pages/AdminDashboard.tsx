@@ -13,27 +13,32 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchData = async () => {
-    setLoading(true);
-    try {
-      const headers = { "Authorization": `Bearer ${token}` };
-      
-      // දත්ත තුනම එකවර ලබා ගැනීම
-      const [statsRes, orderRes, storeRes] = await Promise.all([
-        fetch("https://vendor-backend-kr2j.vercel.app/api/v1/admin/stats", { headers }),
-        fetch("https://vendor-backend-kr2j.vercel.app/api/v1/admin/orders", { headers }),
-        fetch("https://vendor-backend-kr2j.vercel.app/api/v1/admin/stores", { headers })
-      ]);
+  setLoading(true);
+  try {
+    const headers = { "Authorization": `Bearer ${token}` };
+    
+    // දත්ත ලබා ගැනීම
+    const [statsRes, orderRes, storeRes] = await Promise.all([
+      fetch("https://vendor-backend-kr2j.vercel.app/api/v1/admin/stats", { headers }),
+      fetch("https://vendor-backend-kr2j.vercel.app/api/v1/admin/orders", { headers }),
+      fetch("https://vendor-backend-kr2j.vercel.app/api/v1/admin/stores", { headers })
+    ]);
 
-      setStats(await statsRes.json());
-      setOrders(await orderRes.json());
-      setStores(await storeRes.json());
-      
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching admin data:", err);
-      setLoading(false);
-    }
-  };
+    const statsData = await statsRes.json();
+    const orderData = await orderRes.json();
+    const storeData = await storeRes.json();
+
+    // දත්ත Array දැයි පරීක්ෂා කර පසුව set කරන්න
+    setStats(statsData);
+    setOrders(Array.isArray(orderData) ? orderData : []);
+    setStores(Array.isArray(storeData) ? storeData : []);
+    
+    setLoading(false);
+  } catch (err) {
+    console.error("Error fetching admin data:", err);
+    setLoading(false);
+  }
+};
 
   const toggleBlockVendor = async (storeId: string) => {
     try {

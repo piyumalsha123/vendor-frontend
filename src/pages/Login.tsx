@@ -27,13 +27,13 @@ const Login = () => {
 
       setUser(userData); 
 
-      if (userData.roles.includes("ADMIN")) {
-        window.location.href = "/admin/dashboard"; 
-      } else if (userData.roles.includes("VENDOR")) {
-        window.location.href = "/vendor/dashboard";
-      } else {
-        window.location.href = "/customer/dashboard";
-      }
+if (userData.roles.includes("ADMIN")) {
+  window.location.href = "/admin/dashboard";
+} else if (userData.roles.includes("VENDOR")) {
+  window.location.href = "/vendor/dashboard";
+} else {
+  window.location.href = "/customer/dashboard";
+}
      
       
     } catch (err: any) {
