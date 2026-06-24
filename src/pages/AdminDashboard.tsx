@@ -14,24 +14,34 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchData = async () => {
-    setLoading(true);
-    try {
-      const headers = { "Authorization": `Bearer ${token}` };
-      const [statsRes, orderRes, storeRes] = await Promise.all([
-        fetch(`${API_URL}/admin/stats`, { headers }),
-        fetch(`${API_URL}/admin/orders`, { headers }),
-        fetch(`${API_URL}/admin/stores`, { headers })
-      ]);
+  setLoading(true);
+  try {
+    const headers = { "Authorization": `Bearer ${token}` };
+    
+    // API තුන වෙන වෙනම Call කිරීම (එකක් අසාර්ථක වුවත් අනෙක ක්‍රියාත්මක වේ)
+    const [statsRes, orderRes, storeRes] = await Promise.all([
+      fetch(`${API_URL}/admin/stats`, { headers }).catch(() => ({ json: () => ({ users: 0, vendors: 0, orders: 0 }) })),
+      fetch(`${API_URL}/admin/orders`, { headers }).catch(() => ({ json: () => [] })),
+      fetch(`${API_URL}/admin/stores`, { headers }).catch(() => ({ json: () => [] }))
+    ]);
 
-      setStats(await statsRes.json());
-      setOrders(await orderRes.json());
-      setStores(await storeRes.json());
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching admin data:", err);
-      setLoading(false);
-    }
-  };
+    const statsData = await statsRes.json();
+    const orderData = await orderRes.json();
+    const storeData = await storeRes.json();
+
+    // Console logs මගින් දත්ත එන හැටි බලන්න (බොහොම වැදගත්!)
+    console.log("Stats:", statsData, "Orders:", orderData, "Stores:", storeData);
+
+    setStats(statsData || { users: 0, vendors: 0, orders: 0 });
+    setOrders(Array.isArray(orderData) ? orderData : []);
+    setStores(Array.isArray(storeData) ? storeData : []);
+    
+    setLoading(false);
+  } catch (err) {
+    console.error("Critical Error:", err);
+    setLoading(false);
+  }
+};
 
   const toggleBlockVendor = async (storeId: string) => {
     try {
