@@ -13,6 +13,7 @@ import MyOrders from "../pages/Myorders";
 import StorePage from "../pages/StorePage";
 import Profile from "../pages/Profile";
 import StoreSettings from "../pages/StoreSettings";
+import AdminDashboard from "../pages/AdminDashboard";
 
 const Router = () => {
   return (
@@ -53,6 +54,7 @@ const Router = () => {
         </Route> 
 
 <Route path="/store/:vendorId" element={<StorePage />} />
+<Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );
