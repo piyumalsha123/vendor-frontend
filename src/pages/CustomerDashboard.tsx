@@ -34,7 +34,7 @@ useEffect(() => {
 
 const fetchProducts = async () => {
     
-    const url = `http://localhost:5000/api/v1/products/public-products?search=${debouncedSearch}&category=${selectedCategory}`;
+    const url = `https://vendor-backend-kr2j.vercel.app/api/v1/products/public-products?search=${debouncedSearch}&category=${selectedCategory}`;
     const res = await fetch(url);
     const result = await res.json();
     if (res.ok) setProducts(result.data);

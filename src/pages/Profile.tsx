@@ -13,7 +13,7 @@ const Profile = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/v1/profile", {
+      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/profile", {
         headers: { 'Authorization': `Bearer ${localStorage.getItem("ACCESS_TOKEN")}`, 'Content-Type': 'application/json' }
       });
       if (res.ok) {
@@ -27,7 +27,7 @@ const Profile = () => {
     setError("");
     try {
       const payload = isEditing ? { ...user, ...passwords } : user;
-      const res = await fetch("http://localhost:5000/api/v1/profile", {
+      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/profile", {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
         body: JSON.stringify(payload)

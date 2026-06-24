@@ -11,7 +11,7 @@ const MyOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/orders/customer/me", {
+      const response = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/orders/customer/me", {
         headers: { 'Authorization': `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
       });
       const data = await response.json();

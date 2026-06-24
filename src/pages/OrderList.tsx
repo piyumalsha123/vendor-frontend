@@ -12,7 +12,7 @@ const VendorOrders = () => {
 
  const fetchVendorOrders = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/v1/orders/vendor/me", {
+    const response = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/orders/vendor/me", {
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
     });
     const result = await response.json();
@@ -35,7 +35,7 @@ const VendorOrders = () => {
 //   console.log("Attempting to fetch details for ID:", customerId);
   
 //   try {
-//     const response = await fetch(`http://localhost:5000/api/v1/user/details/${customerId}`, {
+//     const response = await fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/user/details/${customerId}`, {
 //       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
 //     });
     
@@ -55,7 +55,7 @@ const VendorOrders = () => {
 
   const updateStatus = async (orderId: string, status: string) => {
     try {
-      await fetch(`http://localhost:5000/api/v1/orders/status/${orderId}`, {
+      await fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/orders/status/${orderId}`, {
         method: 'PUT',
         headers: {
           "Content-Type": "application/json",

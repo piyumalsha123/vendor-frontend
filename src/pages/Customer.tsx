@@ -18,7 +18,7 @@ const Customer = () => {
 
   useEffect(() => {
     fetchCustomers()
-    // const res = axios.get("http://localhost:5000/api/v1/customer")
+    // const res = axios.get("https://vendor-backend-kr2j.vercel.app/api/v1/customer")
     // res
     //   .then((resData) => {
     //     console.log(resData)

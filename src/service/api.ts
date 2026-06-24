@@ -1,7 +1,8 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "https://vendor-backend-kr2j.vercel.app/api/v1"
+  baseURL: "https://vendor-backend-kr2j.vercel.app/api/v1",
+   withCredentials: true,
 })
 
 const PUBLIC_ENDPOINTS = ["/auth/login", "/auth/register", "/auth/refresh"]

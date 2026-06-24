@@ -15,8 +15,8 @@ const StorePage = () => {
 
   const fetchStoreDetails = async () => {
   const [storeRes, prodRes] = await Promise.all([
-    fetch(`http://localhost:5000/api/v1/stores/${vendorId}`),
-    fetch(`http://localhost:5000/api/v1/products?vendorId=${vendorId}`)
+    fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
+    fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
   ]);
   const storeData = await storeRes.json();
   console.log("Store Data:", storeData); 

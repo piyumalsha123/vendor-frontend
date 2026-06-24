@@ -23,7 +23,7 @@ const MyProducts = () => {
 
   const fetchProducts = async () => {
   try {
-    const res = await fetch("http://localhost:5000/api/v1/products/my-products", { 
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/products/my-products", { 
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
     });
     const result = await res.json();
@@ -34,7 +34,7 @@ const MyProducts = () => {
 
   const fetchStoreSettings = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/v1/stores/settings", {
+      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/stores/settings", {
         headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
       });
       if (!res.ok) return;
@@ -54,7 +54,7 @@ const MyProducts = () => {
   const uploadImageToCloudinary = async (file: File) => {
     const data = new FormData();
     data.append("image", file);
-    const res = await fetch("http://localhost:5000/api/v1/upload", {
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/upload", {
       method: "POST",
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
       body: data,
@@ -67,7 +67,7 @@ const MyProducts = () => {
   if (!confirm("Are you sure?")) return;
   try {
    
-    const res = await fetch(`http://localhost:5000/api/v1/products/delete/${id}`, {
+    const res = await fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products/delete/${id}`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
     });
@@ -109,7 +109,7 @@ const MyProducts = () => {
       images: imageUrl ? [imageUrl] : [] 
     };
 
-    const res = await fetch("http://localhost:5000/api/v1/products/save", {
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/products/save", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
       body: JSON.stringify(payload),
@@ -138,7 +138,7 @@ const MyProducts = () => {
       images: [imageUrl]
     };
 
-    const res = await fetch(`http://localhost:5000/api/v1/products/update/${selectedProduct._id}`, {
+    const res = await fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products/update/${selectedProduct._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
       body: JSON.stringify(payload),

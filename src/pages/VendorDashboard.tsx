@@ -38,7 +38,7 @@ const VendorDashboard = () => {
  const fetchDashboardStats = async () => {
   const token = localStorage.getItem("ACCESS_TOKEN");
   try {
-    const res = await fetch("http://localhost:5000/api/v1/vendor/dashboard-stats", {
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/vendor/dashboard-stats", {
       method: "GET",
       headers: { 
         "Authorization": `Bearer ${token}`,
@@ -73,7 +73,7 @@ useEffect(() => {
 const initDashboard = async () => {
   setLoading(true);
   try {
-    const res = await fetch("http://localhost:5000/api/v1/store/check", {
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/check", {
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
     });
     const data = await res.json();
@@ -113,7 +113,7 @@ const initDashboard = async () => {
 
   const fetchSuggestedAttributes = async (category: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/v1/generate-attributes", {
+      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/generate-attributes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category })
@@ -128,7 +128,7 @@ const initDashboard = async () => {
   const handleCategorySelect = async (cat: string) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/v1/store/create", {
+      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/create", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -165,7 +165,7 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
   formData.append("logo", file);
 
   try {
-    const res = await fetch("http://localhost:5000/api/v1/store/upload-logo", {
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/upload-logo", {
       method: "POST",
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
       body: formData
@@ -176,7 +176,7 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (data.imageUrl) {
         const newLogoUrl = data.imageUrl; 
         
-        const saveRes = await fetch("http://localhost:5000/api/v1/store/save", {
+        const saveRes = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/save", {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",
@@ -347,7 +347,7 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     };
 
     try {
-        const res = await fetch("http://localhost:5000/api/v1/store/save", { 
+        const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/save", { 
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",

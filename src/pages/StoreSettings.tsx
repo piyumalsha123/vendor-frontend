@@ -14,7 +14,7 @@ const StoreSettings = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-  fetch("http://localhost:5000/api/v1/store/settings", {
+  fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/settings", {
     headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
   })
   .then(res => res.json())
@@ -42,7 +42,7 @@ const StoreSettings = () => {
     formData.append("logo", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/v1/store/upload-logo", {
+      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/upload-logo", {
         method: "POST",
         headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` },
         body: formData
@@ -55,7 +55,7 @@ const StoreSettings = () => {
   const saveSettings = async () => {
     setLoading(true);
     try {
-      await fetch("http://localhost:5000/api/v1/store/save", {
+      await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/save", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
