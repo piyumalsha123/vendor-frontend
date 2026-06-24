@@ -119,6 +119,7 @@ const initDashboard = async () => {
         body: JSON.stringify({ category })
       });
       const data = await res.json();
+      console.log("Backend Response:", data);
       setSuggestedAttributes(data.attributes || []);
     } catch (err) {
       console.error("AI Error:", err);
