@@ -120,7 +120,14 @@ const initDashboard = async () => {
       });
       const data = await res.json();
       console.log("Backend Response:", data);
-      setSuggestedAttributes(data.attributes || []);
+      if (data.attributes && data.attributes.length > 0) {
+  setSuggestedAttributes(data.attributes);
+
+  setStoreDetails(prev => ({
+    ...prev,
+    customAttributes: data.attributes.join(", ")
+  }));
+}
     } catch (err) {
       console.error("AI Error:", err);
     }
@@ -266,8 +273,11 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
           </div>
         </div>
         <button 
-  onClick={() => {
-    if (selectedCategory) fetchSuggestedAttributes(selectedCategory);
+  onClick={async () => {
+    if (selectedCategory) {
+      await fetchSuggestedAttributes(selectedCategory);
+    }
+
     setIsEditModalOpen(true);
   }} 
   className="text-sm text-[#4A3728] font-bold underline decoration-[#D4C4A8] hover:text-[#8B5E3C]"
