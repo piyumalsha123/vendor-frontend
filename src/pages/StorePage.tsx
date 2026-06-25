@@ -15,33 +15,25 @@ const StorePage = () => {
 
  const fetchStoreDetails = async () => {
   try {
-    // 1. vendorId එක නිවැරදි string එකක් ලෙස 'id' ට ලබාගන්න
-    const id = typeof vendorId === 'string' 
-      ? vendorId 
-      : (vendorId as any)?.vendorId || (vendorId as any)?.id;
+    console.log("Fetching for ID:", vendorId); // මෙය බලන්න [object Object] ද නැද්ද කියා
 
-    if (!id) {
-      console.error("Vendor ID missing or invalid");
-      return;
-    }
-
-    // 2. මෙතැනදී 'vendorId' වෙනුවට අනිවාර්යයෙන්ම 'id' variable එක භාවිතා කරන්න
     const [storeRes, prodRes] = await Promise.all([
-      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${id}`),
-      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${id}`)
+      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
+      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
     ]);
 
     const storeData = await storeRes.json();
-    console.log("Full Store Data:", storeData);
+    console.log("Store Response:", storeData); // මෙහි Error එකක් එනවද බලන්න
 
-    setStore(storeData.data || storeData); 
+    if (storeRes.ok) {
+        setStore(storeData);
+    } else {
+        console.error("Store not found or server error");
+    }
     
-    const prodData = await prodRes.json();
-    // Array එකක්දැයි පරීක්ෂා කර set කරන්න
-    setProducts(Array.isArray(prodData) ? prodData : (prodData.data || [])); 
-    
+    // ... products කොටස
   } catch (error) {
-    console.error("Error fetching store:", error);
+    console.error("Fetch error:", error);
   }
 };
 
