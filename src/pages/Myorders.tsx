@@ -106,12 +106,9 @@ const MyOrders = () => {
                   
                   <div className="mt-3 pt-3 border-t border-[#D4C4A8]/50 text-[11px] font-bold text-[#4A3728]">
                     <p>Store: 
-                      <Link 
-  to={`/store/${item.vendorId._id || item.vendorId}`} 
-  className="text-indigo-600 hover:underline ml-1 font-bold"
->
-  {item.storeName}
-</Link>
+                      <Link to={`/store/${item.vendorId}`} className="text-indigo-600 hover:underline ml-1">
+                        {item.storeName || "Visit Store"}
+                      </Link>
                     </p>
                     
                     <div className="mt-2 flex justify-between items-center bg-[#EBE5D6]/70 p-2 rounded-lg">
