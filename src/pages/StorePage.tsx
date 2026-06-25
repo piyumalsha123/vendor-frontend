@@ -15,25 +15,36 @@ const StorePage = () => {
 
  const fetchStoreDetails = async () => {
   try {
-    const id = typeof vendorId === 'string' ? vendorId : (vendorId as any)?.vendorId || (vendorId as any)?.id;
+    // 1. vendorId එක නිවැරදි string එකක් ලෙස 'id' ට ලබාගන්න
+    const id = typeof vendorId === 'string' 
+      ? vendorId 
+      : (vendorId as any)?.vendorId || (vendorId as any)?.id;
 
-    if (!id) return;
+    if (!id) {
+      console.error("Vendor ID missing or invalid");
+      return;
+    }
 
+    // 2. මෙතැනදී 'vendorId' වෙනුවට අනිවාර්යයෙන්ම 'id' variable එක භාවිතා කරන්න
     const [storeRes, prodRes] = await Promise.all([
-      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
-      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
+      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${id}`),
+      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${id}`)
     ]);
+
     const storeData = await storeRes.json();
     console.log("Full Store Data:", storeData);
 
     setStore(storeData.data || storeData); 
     
     const prodData = await prodRes.json();
-    setProducts(prodData.data || prodData); 
+    // Array එකක්දැයි පරීක්ෂා කර set කරන්න
+    setProducts(Array.isArray(prodData) ? prodData : (prodData.data || [])); 
+    
   } catch (error) {
     console.error("Error fetching store:", error);
   }
 };
+
  const groupedProducts = Array.isArray(products) 
   ? products.reduce((acc: any, product: any) => {
       const cat = product.category || "General";
