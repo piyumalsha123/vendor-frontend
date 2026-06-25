@@ -19,21 +19,23 @@ useEffect(() => {
   })
   .then(res => res.json())
   .then(data => {
-    console.log("Fetched Settings Data:", data); // මෙය බලන්න, data එකේ ඇතුලේ තව object එකක් තියෙනවද?
+    console.log("Full Response from API:", data); // මෙතනදී console එක බලන්න
 
-    if (data) {
-      // දත්ත ලැබෙන ව්‍යුහය අනුව (සමහර විට data.store හෝ data පමණක් විය හැක)
-      const targetData = data.store || data; 
-      
+    // දත්ත ලැබෙන ව්‍යුහය පරීක්ෂා කිරීම
+    // ඔබේ Backend එකෙන් store object එක කෙලින්ම එන්නේ නම් 'data' භාවිතා කරන්න
+    // නැතහොත් 'data.store' ලෙස උත්සාහ කරන්න
+    const store = data.store || data; 
+
+    if (store) {
       setStoreData({
-        storeName: targetData.storeName || "",
-        phone: targetData.phone || "",
-        logo: targetData.logo || "",
-        email: targetData.email || "",      
-        address: targetData.address || "",  
-        category: targetData.category || "",
-        customAttributes: Array.isArray(targetData.customAttributes) ? targetData.customAttributes.join(", ") : targetData.customAttributes || "",
-        deliveryMethods: Array.isArray(targetData.deliveryMethods) ? targetData.deliveryMethods.join(", ") : targetData.deliveryMethods || ""
+        storeName: store.storeName || "",
+        phone: store.phone || "",
+        logo: store.logo || "",
+        email: store.email || "",      
+        address: store.address || "",  
+        category: store.category || "",
+        customAttributes: Array.isArray(store.customAttributes) ? store.customAttributes.join(", ") : store.customAttributes || "",
+        deliveryMethods: Array.isArray(store.deliveryMethods) ? store.deliveryMethods.join(", ") : store.deliveryMethods || ""
       });
     }
   })
