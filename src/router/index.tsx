@@ -56,7 +56,6 @@ const Router = () => {
 
 <Route path="/store/:vendorId" element={<StorePage />} />
 <Route path="/admin/dashboard" element={<AdminDashboard />} />
-<Route path="/store/:id" element={<StorePage />} />
       </Routes>
     </BrowserRouter>
   );

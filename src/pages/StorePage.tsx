@@ -15,14 +15,9 @@ const StorePage = () => {
 
  const fetchStoreDetails = async () => {
   try {
-    const id = typeof vendorId === 'object' && vendorId !== null 
-      ? (vendorId as any).vendorId || (vendorId as any).id 
-      : vendorId;
+    const id = typeof vendorId === 'string' ? vendorId : (vendorId as any)?.vendorId || (vendorId as any)?.id;
 
-    if (!id) {
-      console.error("Vendor ID missing!");
-      return;
-    }
+    if (!id) return;
 
     const [storeRes, prodRes] = await Promise.all([
       fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
@@ -47,7 +42,7 @@ const StorePage = () => {
       return acc;
     }, {})
   : {};
-  
+
   if (!store) return <div className="min-h-screen flex items-center justify-center font-black text-2xl">Loading Store...</div>;
 
   return (
