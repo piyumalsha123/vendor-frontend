@@ -20,6 +20,7 @@ const StorePage = () => {
       fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
     ]);
     const storeData = await storeRes.json();
+    console.log("Full Store Data:", storeData);
 
     setStore(storeData.data || storeData); 
     
@@ -41,17 +42,20 @@ const StorePage = () => {
   return (
     <div className="min-h-screen bg-[#c5a67e] pb-20">
      
-      <div className="bg-[#2D2A26] text-white p-10 rounded-b-[3rem] shadow-2xl">
-        <button onClick={() => navigate(-1)} className="mb-6 font-bold opacity-70 hover:opacity-100 transition">← Back</button>
-        <h1 className="text-5xl font-black">{store.storeName}</h1>
-<div className="flex flex-wrap gap-4 mt-4 text-sm font-medium opacity-80">
-  <span className="bg-white/10 px-4 py-1 rounded-full">{store.category}</span>
-  <span className="flex items-center gap-1">
-      📞 {store?.phone && store.phone !== "" ? store.phone : "No Phone"}
+     <div className="bg-[#2D2A26] text-white p-10 rounded-b-[3rem] shadow-2xl">
+  <button onClick={() => navigate(-1)} className="mb-6 font-bold opacity-70 hover:opacity-100 transition">← Back</button>
+  <h1 className="text-5xl font-black">{store.storeName}</h1>
+  
+  <div className="flex flex-wrap gap-4 mt-4 text-sm font-medium opacity-80">
+    <span className="bg-white/10 px-4 py-1 rounded-full">{store.category}</span>
+  
+    <span className="flex items-center gap-1">
+      📞 {store.phone ? store.phone : "No Phone Added"}
     </span>
-  {store.email && <span>📧 {store.email}</span>}
+    
+    {store.email && <span className="flex items-center gap-1">📧 {store.email}</span>}
+  </div>
 </div>
-      </div>
 
       <div className="max-w-6xl mx-auto px-6 mt-10">
         {Object.keys(groupedProducts).map((category) => (
