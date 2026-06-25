@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    localStorage.removeItem("ACCESS_TOKEN"); 
+    navigate("/login"); 
+  };
   const [stats, setStats] = useState({ users: 0, vendors: 0, orders: 0 });
   const [stores, setStores] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
@@ -71,9 +77,17 @@ const AdminDashboard = () => {
   if (loading) return <div className="p-10 text-center text-xl font-semibold">Loading Admin Panel...</div>;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-extrabold text-gray-800 mb-8">Admin Dashboard</h1>
-
+   <div className="p-8 bg-gray-100 min-h-screen">
+    {/* Header Section */}
+    <div className="flex justify-between items-center mb-8">
+      <h1 className="text-3xl font-extrabold text-gray-800">Admin Dashboard</h1>
+      <button 
+        onClick={handleLogout}
+        className="px-6 py-2 bg-gray-800 text-white rounded-xl font-bold hover:bg-gray-900 transition"
+      >
+        Logout
+      </button>
+    </div>
       {/* Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {[
