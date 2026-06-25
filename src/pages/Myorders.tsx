@@ -82,13 +82,11 @@ const MyOrders = () => {
         </table>
       </div>
 
-      // selectedOrder Modal කොටස
 
 {selectedOrder && (
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm" onClick={() => setSelectedOrder(null)}>
     <div className="bg-[#FDFBF7] p-8 rounded-3xl w-full max-w-lg shadow-2xl border border-[#D4C4A8] max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
       
-      {/* Header කොටස */}
       <div className="flex justify-between items-start mb-6">
         <div>
           <h2 className="text-2xl font-black text-[#4A3728]">Order Details</h2>
@@ -97,40 +95,32 @@ const MyOrders = () => {
         <button onClick={() => setSelectedOrder(null)} className="text-2xl font-bold bg-[#EBE5D6] p-2 rounded-full hover:bg-[#D4C4A8] transition">✕</button>
       </div>
       
-      {/* Products කොටස */}
       <div className="space-y-4 mb-6">
         {selectedOrder.items?.map((item: any, idx: number) => (
-          <div key={idx} className="bg-[#EBE5D6]/50 p-4 rounded-2xl border border-[#D4C4A8] flex items-center gap-4">
-            
-            {/* භාණ්ඩයේ පින්තූරය */}
-            <img 
-              src={item.images?.[0] || "https://via.placeholder.com/80"} 
-              alt={item.title} 
-              className="w-16 h-16 rounded-xl object-cover border border-[#D4C4A8]" 
-            />
-            
-            {/* භාණ්ඩයේ තොරතුරු */}
-            <div className="flex-1">
-              <p className="font-black text-[#2D2A26] text-sm truncate">{item.title}</p>
-              <div className="flex justify-between items-center mt-1">
+          <div key={idx} className="bg-[#EBE5D6]/50 p-4 rounded-2xl border border-[#D4C4A8]">
+            <div className="flex items-center gap-4 mb-3">
+              <img src={item.images?.[0] || "https://via.placeholder.com/80"} className="w-16 h-16 rounded-xl object-cover border border-[#D4C4A8]" />
+              <div className="flex-1">
+                <p className="font-black text-[#2D2A26] text-sm">{item.title}</p>
                 <p className="text-xs text-[#8B5E3C] font-bold">Qty: {item.quantity}</p>
-                {/* Store link එක */}
-                {item.storeId && (
-                  <Link to={`/store/${item.storeId}`} className="text-[10px] font-black uppercase text-indigo-600 hover:underline tracking-wider">
-                    Visit: {item.storeName || "View Store"}
-                  </Link>
-                )}
               </div>
             </div>
             
+            {/* Store තොරතුරු සහ Delivery තොරතුරු */}
+            <div className="mt-3 pt-3 border-t border-[#D4C4A8]/50 text-[11px] font-bold text-[#4A3728]">
+              <p>Store: <Link to={`/store/${item.storeId}`} className="text-indigo-600 hover:underline">{item.storeName || "Unknown Store"}</Link></p>
+              <p>Email: {item.storeEmail || "N/A"}</p>
+              <p className="text-green-700">Delivery Charge: LKR {item.deliveryCharge ? item.deliveryCharge.toLocaleString() : "0"}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Footer කොටස */}
-      <div className="border-t border-[#D4C4A8] pt-4 mt-4 flex justify-between items-center bg-[#FAF9F6] p-4 rounded-xl">
-        <p className="text-xs font-black uppercase tracking-widest text-gray-500">Order Total</p>
-        <p className="text-lg font-black text-[#2D2A26]">LKR {selectedOrder.totalPrice.toLocaleString()}</p>
+      <div className="border-t border-[#D4C4A8] pt-4 mt-4 bg-[#FAF9F6] p-4 rounded-xl">
+        <div className="flex justify-between items-center mb-2">
+            <span className="text-xs font-black uppercase text-gray-500">Total Price</span>
+            <span className="text-lg font-black text-[#2D2A26]">LKR {selectedOrder.totalPrice.toLocaleString()}</span>
+        </div>
       </div>
 
       <button onClick={() => setSelectedOrder(null)} className="w-full mt-6 bg-[#4A3728] text-white py-3 rounded-2xl font-black uppercase tracking-widest hover:bg-[#2D2A26] transition">Close</button>

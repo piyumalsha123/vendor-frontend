@@ -104,7 +104,7 @@ const StorePage = () => {
 
      
       {fullImage && (
-        <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black flex items-center justify-center p-4">
           <button onClick={() => setFullImage(null)} className="absolute top-10 right-10 text-white text-4xl font-bold">✕</button>
           <img src={fullImage} className="max-w-full max-h-full object-contain rounded-xl" />
         </div>
