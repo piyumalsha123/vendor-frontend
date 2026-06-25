@@ -19,23 +19,17 @@ useEffect(() => {
   })
   .then(res => res.json())
   .then(data => {
-    console.log("Full Response from API:", data); // මෙතනදී console එක බලන්න
-
-    // දත්ත ලැබෙන ව්‍යුහය පරීක්ෂා කිරීම
-    // ඔබේ Backend එකෙන් store object එක කෙලින්ම එන්නේ නම් 'data' භාවිතා කරන්න
-    // නැතහොත් 'data.store' ලෙස උත්සාහ කරන්න
-    const store = data.store || data; 
-
-    if (store) {
+    // Backend එකෙන් එන දත්තවල ව්‍යුහය පරීක්ෂා කර set කරන්න
+    if (data) {
       setStoreData({
-        storeName: store.storeName || "",
-        phone: store.phone || "",
-        logo: store.logo || "",
-        email: store.email || "",      
-        address: store.address || "",  
-        category: store.category || "",
-        customAttributes: Array.isArray(store.customAttributes) ? store.customAttributes.join(", ") : store.customAttributes || "",
-        deliveryMethods: Array.isArray(store.deliveryMethods) ? store.deliveryMethods.join(", ") : store.deliveryMethods || ""
+        storeName: data.storeName || "",
+        phone: data.phone || "",
+        logo: data.logo || "",
+        email: data.email || "",      
+        address: data.address || "",  
+        category: data.category || "",
+        customAttributes: Array.isArray(data.customAttributes) ? data.customAttributes.join(", ") : (data.customAttributes || ""),
+        deliveryMethods: Array.isArray(data.deliveryMethods) ? data.deliveryMethods.join(", ") : (data.deliveryMethods || "")
       });
     }
   })
@@ -60,21 +54,32 @@ useEffect(() => {
   };
 
   const saveSettings = async () => {
-    setLoading(true);
-    try {
-      await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/save", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` 
-        },
-        body: JSON.stringify(storeData)
-      });
-      alert("Settings saved successfully!");
-    } catch (err) { alert("Save failed"); } 
-    finally { setLoading(false); }
-  };
+  setLoading(true);
+  try {
+    const payload = {
+      ...storeData,
+      customAttributes: typeof storeData.customAttributes === 'string' 
+        ? storeData.customAttributes.split(',').map(item => item.trim()) 
+        : storeData.customAttributes,
+      deliveryMethods: typeof storeData.deliveryMethods === 'string' 
+        ? storeData.deliveryMethods.split(',').map(item => item.trim()) 
+        : storeData.deliveryMethods
+    };
 
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/save", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` 
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    if (res.ok) alert("Settings saved successfully!");
+    else alert("Save failed, check your inputs.");
+  } catch (err) { alert("Save failed"); } 
+  finally { setLoading(false); }
+};
   
   const renderInput = (label: string, field: keyof typeof storeData, type: string = "text") => (
     <div className="mb-4">
