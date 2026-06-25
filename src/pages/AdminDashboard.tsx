@@ -4,7 +4,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({ users: 0, vendors: 0, orders: 0 });
   const [stores, setStores] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]); // User ලා සඳහා අලුත් state එක
+  const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("ACCESS_TOKEN");
@@ -26,14 +26,19 @@ const AdminDashboard = () => {
         fetch(`${API_URL}/admin/users`, { headers })
       ]);
 
-      setStats(await statsRes.json());
-      setOrders(await orderRes.json());
-      setStores(await storeRes.json());
-      setUsers(await userRes.json());
+      const statsData = await statsRes.json();
+      const orderData = await orderRes.json();
+      const storeData = await storeRes.json();
+      const userData = await userRes.json();
+
+      setStats(statsData || { users: 0, vendors: 0, orders: 0 });
+      setOrders(Array.isArray(orderData) ? orderData : []);
+      setStores(Array.isArray(storeData) ? storeData : []);
+      setUsers(Array.isArray(userData) ? userData : []);
       
       setLoading(false);
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error fetching data:", err);
       setLoading(false);
     }
   };
@@ -76,10 +81,7 @@ const AdminDashboard = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50">
-              <tr>
-                <th className="p-4">Store & Contact</th>
-                <th className="p-4 text-right">Action</th>
-              </tr>
+              <tr><th className="p-4">Store & Contact</th><th className="p-4 text-right">Action</th></tr>
             </thead>
             <tbody>
               {stores.map((store: any) => (
@@ -132,7 +134,9 @@ const AdminDashboard = () => {
           <tbody>
             {orders.slice(0, 5).map((order: any) => (
               <tr key={order._id} className="border-b">
-                <td className="p-4 font-mono font-bold text-indigo-600">OD{order._id.toString().slice(-6).toUpperCase()}</td>
+                <td className="p-4 font-mono font-bold text-indigo-600">
+                  OD{order._id?.toString().slice(-6).toUpperCase()}
+                </td>
                 <td className="p-4">{order.customerId?.name || "Guest"}</td>
                 <td className="p-4"><span className="px-3 py-1 bg-gray-100 rounded-full text-xs font-bold uppercase">{order.status}</span></td>
               </tr>
