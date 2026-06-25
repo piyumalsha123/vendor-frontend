@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ users: 0, vendors: 0, orders: 0 });
@@ -55,6 +56,18 @@ const AdminDashboard = () => {
     }
   };
 
+  const toggleBlockUser = async (userId: string) => {
+  try {
+    const res = await fetch(`${API_URL}/admin/users/${userId}/toggle-block`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (res.ok) fetchData(); 
+  } catch (err) {
+    console.error("Toggle error:", err);
+  }
+};
+
   if (loading) return <div className="p-10 text-center text-xl font-semibold">Loading Admin Panel...</div>;
 
   return (
@@ -87,7 +100,9 @@ const AdminDashboard = () => {
               {stores.map((store: any) => (
                 <tr key={store._id} className="border-b hover:bg-gray-50 transition">
                   <td className="p-4">
-                    <div className="font-bold text-gray-800">{store.storeName}</div>
+                    <Link to={`/store/${store._id}`} className="font-bold text-indigo-600 hover:underline">
+                     {store.storeName}
+                       </Link>
                     <div className="text-sm text-gray-500">Owner: {store.vendorId?.name || "N/A"}</div>
                     <div className="text-xs text-blue-500">{store.vendorId?.email}</div>
                   </td>
@@ -109,19 +124,27 @@ const AdminDashboard = () => {
       {/* Users List Table */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-10">
         <h2 className="text-xl font-bold mb-6 text-gray-800">Registered Users</h2>
-        <table className="w-full text-left">
-          <thead className="bg-gray-50">
-            <tr><th className="p-4">Name</th><th className="p-4">Email</th></tr>
-          </thead>
-          <tbody>
-            {users.map((user: any) => (
-              <tr key={user._id} className="border-b">
-                <td className="p-4">{user.name}</td>
-                <td className="p-4">{user.email}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+       <table className="w-full text-left">
+  <thead className="bg-gray-50">
+    <tr><th className="p-4">Name</th><th className="p-4">Email</th><th className="p-4">Action</th></tr>
+  </thead>
+  <tbody>
+    {users.map((user: any) => (
+      <tr key={user._id} className="border-b">
+        <td className="p-4">{user.name}</td>
+        <td className="p-4">{user.email}</td>
+        <td className="p-4">
+          <button 
+            onClick={() => toggleBlockUser(user._id)}
+            className={`px-4 py-2 rounded-lg text-white ${user.approved ? 'bg-red-500' : 'bg-green-500'}`}
+          >
+            {user.approved ? 'Block User' : 'Unblock User'}
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
       </div>
 
       {/* Orders Table */}
