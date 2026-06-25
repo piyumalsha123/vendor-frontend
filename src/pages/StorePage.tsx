@@ -13,17 +13,22 @@ const StorePage = () => {
 
   useEffect(() => { fetchStoreDetails(); }, [vendorId]);
 
-  const fetchStoreDetails = async () => {
-  const [storeRes, prodRes] = await Promise.all([
-    fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
-    fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
-  ]);
-  const storeData = await storeRes.json();
-  console.log("Store Data:", storeData); 
-  setStore(storeData);
-  setProducts(await prodRes.json());
-};
+ const fetchStoreDetails = async () => {
+  try {
+    const [storeRes, prodRes] = await Promise.all([
+      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
+      fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
+    ]);
+    const storeData = await storeRes.json();
 
+    setStore(storeData.data || storeData); 
+    
+    const prodData = await prodRes.json();
+    setProducts(prodData.data || prodData); 
+  } catch (error) {
+    console.error("Error fetching store:", error);
+  }
+};
   const groupedProducts = products.reduce((acc: any, product: any) => {
     const cat = product.category || "General";
     if (!acc[cat]) acc[cat] = [];
@@ -41,7 +46,9 @@ const StorePage = () => {
         <h1 className="text-5xl font-black">{store.storeName}</h1>
 <div className="flex flex-wrap gap-4 mt-4 text-sm font-medium opacity-80">
   <span className="bg-white/10 px-4 py-1 rounded-full">{store.category}</span>
-  <span>📞 {store.phone || "No Phone"}</span>
+  <span className="flex items-center gap-1">
+      📞 {store?.phone && store.phone !== "" ? store.phone : "No Phone"}
+    </span>
   {store.email && <span>📧 {store.email}</span>}
 </div>
       </div>
