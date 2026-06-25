@@ -13,22 +13,27 @@ const StoreSettings = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
   fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/settings", {
     headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
   })
   .then(res => res.json())
   .then(data => {
+    console.log("Fetched Settings Data:", data); // මෙය බලන්න, data එකේ ඇතුලේ තව object එකක් තියෙනවද?
+
     if (data) {
+      // දත්ත ලැබෙන ව්‍යුහය අනුව (සමහර විට data.store හෝ data පමණක් විය හැක)
+      const targetData = data.store || data; 
+      
       setStoreData({
-        storeName: data.storeName || "",
-        phone: data.phone || "",
-        logo: data.logo || "",
-        email: data.email || "",      
-        address: data.address || "",  
-        category: data.category || "",
-        customAttributes: Array.isArray(data.customAttributes) ? data.customAttributes.join(", ") : data.customAttributes || "",
-        deliveryMethods: Array.isArray(data.deliveryMethods) ? data.deliveryMethods.join(", ") : data.deliveryMethods || ""
+        storeName: targetData.storeName || "",
+        phone: targetData.phone || "",
+        logo: targetData.logo || "",
+        email: targetData.email || "",      
+        address: targetData.address || "",  
+        category: targetData.category || "",
+        customAttributes: Array.isArray(targetData.customAttributes) ? targetData.customAttributes.join(", ") : targetData.customAttributes || "",
+        deliveryMethods: Array.isArray(targetData.deliveryMethods) ? targetData.deliveryMethods.join(", ") : targetData.deliveryMethods || ""
       });
     }
   })
