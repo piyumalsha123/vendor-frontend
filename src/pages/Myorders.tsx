@@ -16,7 +16,6 @@ const MyOrders = () => {
       });
       const data = await response.json();
       if (data.data) {
-        // දත්ත Group කිරීම
         const grouped = data.data.reduce((acc: any, order: any) => {
           if (!acc[order.orderId]) { acc[order.orderId] = { ...order }; } 
           else { acc[order.orderId].items.push(...order.items); acc[order.orderId].totalPrice += order.totalPrice; }
@@ -105,20 +104,21 @@ const MyOrders = () => {
                     </div>
                   </div>
                   
-                  {/* Store Details Section */}
                   <div className="mt-3 pt-3 border-t border-[#D4C4A8]/50 text-[11px] font-bold text-[#4A3728]">
                     <p>Store: 
                       <Link to={`/store/${item.vendorId}`} className="text-indigo-600 hover:underline ml-1">
                         {item.storeName || "Visit Store"}
                       </Link>
                     </p>
-                    <p>Email: {item.storeEmail || "N/A"}</p>
-                    <p>Phone: {item.storePhone || "N/A"}</p>
                     
                     <div className="mt-2 flex justify-between items-center bg-[#EBE5D6]/70 p-2 rounded-lg">
                       <span className="text-[10px] uppercase font-black text-gray-500">Price:</span>
                       <span className="font-black">LKR {item.price?.toLocaleString()}</span>
                     </div>
+
+                    <p className={`mt-2 font-black text-xs ${(!item.deliveryCharge || item.deliveryCharge === 0) ? "text-green-600" : "text-orange-600"}`}>
+                       {(!item.deliveryCharge || item.deliveryCharge === 0) ? "✨ Free Delivery" : `Delivery Charge: LKR ${item.deliveryCharge.toLocaleString()}`}
+                    </p>
                   </div>
                 </div>
               ))}
