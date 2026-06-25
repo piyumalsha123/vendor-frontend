@@ -33,7 +33,18 @@ const VendorDashboard = () => {
   });
 
   // const [ setFinalStoreSettings] = useState<FinalStoreSettings | null>(null);
-  const [suggestedAttributes, setSuggestedAttributes] = useState<string[]>([]);
+ const suggestedAttributes = [
+  "Color",
+  "Size",
+  "Material",
+  "Style",
+  "Weight",
+  "Brand",
+  "Pattern",
+  "Occasion",
+  "Length",
+  "Care Instructions"
+];
 
  const fetchDashboardStats = async () => {
   const token = localStorage.getItem("ACCESS_TOKEN");
@@ -93,7 +104,7 @@ const initDashboard = async () => {
           : data.settings.customAttributes
       });
 
-      if (data.category) fetchSuggestedAttributes(data.category);
+      //if (data.category) fetchSuggestedAttributes(data.category);
     }
   } catch (err) {
     console.error("Dashboard error:", err);
@@ -111,27 +122,27 @@ const initDashboard = async () => {
     }
   }, []);
 
-  const fetchSuggestedAttributes = async (category: string) => {
-    try {
-      const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/generate-attributes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category })
-      });
-      const data = await res.json();
-      console.log("Backend Response:", data);
-      if (data.attributes && data.attributes.length > 0) {
-  setSuggestedAttributes(data.attributes);
+//   const fetchSuggestedAttributes = async (category: string) => {
+//     try {
+//       const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/generate-attributes", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ category })
+//       });
+//       const data = await res.json();
+//       console.log("Backend Response:", data);
+//       if (data.attributes && data.attributes.length > 0) {
+//   setSuggestedAttributes(data.attributes);
 
-  setStoreDetails(prev => ({
-    ...prev,
-    customAttributes: data.attributes.join(", ")
-  }));
-}
-    } catch (err) {
-      console.error("AI Error:", err);
-    }
-  };
+//   setStoreDetails(prev => ({
+//     ...prev,
+//     customAttributes: data.attributes.join(", ")
+//   }));
+// }
+//     } catch (err) {
+//       console.error("AI Error:", err);
+//     }
+//   };
 
   const handleCategorySelect = async (cat: string) => {
     setLoading(true);
@@ -148,7 +159,7 @@ const initDashboard = async () => {
       if (res.ok) {
         setSelectedCategory(cat);
         setHasStore(true);
-        fetchSuggestedAttributes(cat);
+        //fetchSuggestedAttributes(cat);
       }
     } catch (err) {
       console.error("Setup Error:", err);
@@ -274,9 +285,9 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         </div>
         <button 
   onClick={async () => {
-    if (selectedCategory) {
-      await fetchSuggestedAttributes(selectedCategory);
-    }
+    // if (selectedCategory) {
+    //   await fetchSuggestedAttributes(selectedCategory);
+    // }
 
     setIsEditModalOpen(true);
   }} 
@@ -293,7 +304,7 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       
       <div className="space-y-6">
        
-
+ 
 <div className="mt-4">
   <label className="block text-sm font-bold mb-2 text-[#4A3728]">Store Attributes:</label>
   <div className="flex flex-wrap gap-2">
@@ -329,7 +340,7 @@ const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       );
     })}
   </div>
-</div>
+</div> 
    
         <div>
           <label className="block text-sm font-bold mb-2 text-[#4A3728]">Delivery Methods:</label>
