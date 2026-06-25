@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-
 import { FaTrash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState<any[]>([]);
@@ -82,7 +82,6 @@ const MyOrders = () => {
         </table>
       </div>
 
-      
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
           <div className="bg-[#FDFBF7] p-8 rounded-3xl w-full max-w-lg shadow-2xl border border-[#D4C4A8]">
@@ -93,7 +92,13 @@ const MyOrders = () => {
               {selectedOrder.items?.map((item: any, idx: number) => (
                 <div key={idx} className="bg-[#EBE5D6]/50 p-4 rounded-2xl border border-[#D4C4A8]">
                   <p className="font-black text-[#2D2A26] text-sm">{item.title}</p>
-                  <p className="text-xs text-[#8B5E3C] font-bold">Qty: {item.quantity}</p>
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-xs text-[#8B5E3C] font-bold">Qty: {item.quantity}</p>
+                    {/* Store link එක */}
+                    <Link to={`/store/${item.storeId}`} className="text-xs font-black text-indigo-600 hover:underline">
+                      {item.storeName || "Visit Store"}
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
