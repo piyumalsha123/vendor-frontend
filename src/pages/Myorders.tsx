@@ -16,6 +16,7 @@ const MyOrders = () => {
       });
       const data = await response.json();
       if (data.data) {
+        // දත්ත Group කිරීම
         const grouped = data.data.reduce((acc: any, order: any) => {
           if (!acc[order.orderId]) { acc[order.orderId] = { ...order }; } 
           else { acc[order.orderId].items.push(...order.items); acc[order.orderId].totalPrice += order.totalPrice; }
@@ -59,7 +60,7 @@ const MyOrders = () => {
                 <td className="p-6">
                   <div className="flex -space-x-2">
                     {order.items?.map((item: any, i: number) => (
-                      <img key={i} src={item.images?.[0]} className="w-10 h-10 rounded-full border-2 border-[#EBE5D6] object-cover" />
+                      <img key={i} src={item.images?.[0] || "https://via.placeholder.com/80"} className="w-10 h-10 rounded-full border-2 border-[#EBE5D6] object-cover" />
                     ))}
                   </div>
                 </td>
@@ -82,51 +83,58 @@ const MyOrders = () => {
         </table>
       </div>
 
-
-{selectedOrder && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm" onClick={() => setSelectedOrder(null)}>
-    <div className="bg-[#FDFBF7] p-8 rounded-3xl w-full max-w-lg shadow-2xl border border-[#D4C4A8] max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-      
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <h2 className="text-2xl font-black text-[#4A3728]">Order Details</h2>
-          <p className="text-[#8B5E3C] font-mono text-sm">{selectedOrder.orderId}</p>
-        </div>
-        <button onClick={() => setSelectedOrder(null)} className="text-2xl font-bold bg-[#EBE5D6] p-2 rounded-full hover:bg-[#D4C4A8] transition">✕</button>
-      </div>
-      
-      <div className="space-y-4 mb-6">
-        {selectedOrder.items?.map((item: any, idx: number) => (
-          <div key={idx} className="bg-[#EBE5D6]/50 p-4 rounded-2xl border border-[#D4C4A8]">
-            <div className="flex items-center gap-4 mb-3">
-              <img src={item.images?.[0] || "https://via.placeholder.com/80"} className="w-16 h-16 rounded-xl object-cover border border-[#D4C4A8]" />
-              <div className="flex-1">
-                <p className="font-black text-[#2D2A26] text-sm">{item.title}</p>
-                <p className="text-xs text-[#8B5E3C] font-bold">Qty: {item.quantity}</p>
+      {selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm" onClick={() => setSelectedOrder(null)}>
+          <div className="bg-[#FDFBF7] p-8 rounded-3xl w-full max-w-lg shadow-2xl border border-[#D4C4A8] max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h2 className="text-2xl font-black text-[#4A3728]">Order Details</h2>
+                <p className="text-[#8B5E3C] font-mono text-sm">{selectedOrder.orderId}</p>
               </div>
+              <button onClick={() => setSelectedOrder(null)} className="text-2xl font-bold bg-[#EBE5D6] p-2 rounded-full hover:bg-[#D4C4A8] transition">✕</button>
             </div>
             
-            {/* Store තොරතුරු සහ Delivery තොරතුරු */}
-            <div className="mt-3 pt-3 border-t border-[#D4C4A8]/50 text-[11px] font-bold text-[#4A3728]">
-              <p>Store: <Link to={`/store/${item.storeId}`} className="text-indigo-600 hover:underline">{item.storeName || "Unknown Store"}</Link></p>
-              <p>Email: {item.storeEmail || "N/A"}</p>
-              <p className="text-green-700">Delivery Charge: LKR {item.deliveryCharge ? item.deliveryCharge.toLocaleString() : "0"}</p>
+            <div className="space-y-4 mb-6">
+              {selectedOrder.items?.map((item: any, idx: number) => (
+                <div key={idx} className="bg-[#EBE5D6]/50 p-4 rounded-2xl border border-[#D4C4A8]">
+                  <div className="flex items-center gap-4 mb-3">
+                    <img src={item.images?.[0] || "https://via.placeholder.com/80"} className="w-16 h-16 rounded-xl object-cover border border-[#D4C4A8]" />
+                    <div className="flex-1">
+                      <p className="font-black text-[#2D2A26] text-sm">{item.title}</p>
+                      <p className="text-xs text-[#8B5E3C] font-bold">Qty: {item.quantity}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Store Details Section */}
+                  <div className="mt-3 pt-3 border-t border-[#D4C4A8]/50 text-[11px] font-bold text-[#4A3728]">
+                    <p>Store: 
+                      <Link to={`/store/${item.vendorId}`} className="text-indigo-600 hover:underline ml-1">
+                        {item.storeName || "Visit Store"}
+                      </Link>
+                    </p>
+                    <p>Email: {item.storeEmail || "N/A"}</p>
+                    <p>Phone: {item.storePhone || "N/A"}</p>
+                    
+                    <div className="mt-2 flex justify-between items-center bg-[#EBE5D6]/70 p-2 rounded-lg">
+                      <span className="text-[10px] uppercase font-black text-gray-500">Price:</span>
+                      <span className="font-black">LKR {item.price?.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
+
+            <div className="border-t border-[#D4C4A8] pt-4 bg-[#FAF9F6] p-4 rounded-xl">
+               <div className="flex justify-between items-center text-lg font-black text-[#2D2A26]">
+                  <span>Total</span>
+                  <span>LKR {selectedOrder.totalPrice.toLocaleString()}</span>
+               </div>
+            </div>
+
+            <button onClick={() => setSelectedOrder(null)} className="w-full mt-6 bg-[#4A3728] text-white py-3 rounded-2xl font-black uppercase tracking-widest hover:bg-[#2D2A26] transition">Close</button>
           </div>
-        ))}
-      </div>
-
-      <div className="border-t border-[#D4C4A8] pt-4 mt-4 bg-[#FAF9F6] p-4 rounded-xl">
-        <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-black uppercase text-gray-500">Total Price</span>
-            <span className="text-lg font-black text-[#2D2A26]">LKR {selectedOrder.totalPrice.toLocaleString()}</span>
         </div>
-      </div>
-
-      <button onClick={() => setSelectedOrder(null)} className="w-full mt-6 bg-[#4A3728] text-white py-3 rounded-2xl font-black uppercase tracking-widest hover:bg-[#2D2A26] transition">Close</button>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };
