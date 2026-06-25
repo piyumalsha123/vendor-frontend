@@ -14,7 +14,7 @@ import StorePage from "../pages/StorePage";
 import Profile from "../pages/Profile";
 import StoreSettings from "../pages/StoreSettings";
 import AdminDashboard from "../pages/AdminDashboard";
-import AdminStore from "../pages/AdminStore";
+
 
 const Router = () => {
   return (
@@ -56,7 +56,7 @@ const Router = () => {
 
 <Route path="/store/:vendorId" element={<StorePage />} />
 <Route path="/admin/dashboard" element={<AdminDashboard />} />
-<Route path="/store/:id" element={<AdminStore />} />
+<Route path="/store/:id" element={<StorePage />} />
       </Routes>
     </BrowserRouter>
   );
