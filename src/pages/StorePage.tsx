@@ -15,6 +15,15 @@ const StorePage = () => {
 
  const fetchStoreDetails = async () => {
   try {
+    const id = typeof vendorId === 'object' && vendorId !== null 
+      ? (vendorId as any).vendorId || (vendorId as any).id 
+      : vendorId;
+
+    if (!id) {
+      console.error("Vendor ID missing!");
+      return;
+    }
+
     const [storeRes, prodRes] = await Promise.all([
       fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/stores/${vendorId}`),
       fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/products?vendorId=${vendorId}`)
@@ -30,13 +39,15 @@ const StorePage = () => {
     console.error("Error fetching store:", error);
   }
 };
-  const groupedProducts = products.reduce((acc: any, product: any) => {
-    const cat = product.category || "General";
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(product);
-    return acc;
-  }, {});
-
+ const groupedProducts = Array.isArray(products) 
+  ? products.reduce((acc: any, product: any) => {
+      const cat = product.category || "General";
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(product);
+      return acc;
+    }, {})
+  : {};
+  
   if (!store) return <div className="min-h-screen flex items-center justify-center font-black text-2xl">Loading Store...</div>;
 
   return (
