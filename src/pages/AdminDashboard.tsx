@@ -114,9 +114,8 @@ const AdminDashboard = () => {
               {stores.map((store: any) => (
                 <tr key={store._id} className="border-b hover:bg-gray-50 transition">
                   <td className="p-4">
-                    <Link to={`/store/${store._id}`} className="font-bold text-indigo-600 hover:underline">
-                     {store.storeName}
-                       </Link>
+                   <Link to={`/store/${store.vendorId}`} className="text-blue-600 hover:underline font-bold">
+                    {store.storeName}</Link>
                     <div className="text-sm text-gray-500">Owner: {store.vendorId?.name || "N/A"}</div>
                     <div className="text-xs text-blue-500">{store.vendorId?.email}</div>
                   </td>
