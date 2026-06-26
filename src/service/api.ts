@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "https://vendor-backend-kr2j.vercel.app",
+  baseURL: "https://vendor-backend-kr2j.vercel.app/api/v1",
    withCredentials: true,
 })
 
