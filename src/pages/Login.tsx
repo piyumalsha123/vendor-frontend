@@ -12,35 +12,66 @@ const Login = () => {
   const { setUser } = useAuth();
 
  const handleLogin = async (e: any) => {
-    if (e) e.preventDefault();
-    try {
-      const loginData = await login(email, password);
-      console.log("Login Response:", loginData); 
-      
-      const accessToken = loginData?.accessToken || loginData?.data?.accessToken;
-      const userData = loginData?.user || loginData?.data; 
 
-      if (!accessToken) return alert("Login failed - No token received");
-      
-      localStorage.setItem("ACCESS_TOKEN", accessToken);
-      localStorage.setItem("user", JSON.stringify(userData)); 
+  if (e) e.preventDefault();
 
-      setUser(userData); 
+  try {
 
-if (userData.roles.includes("ADMIN")) {
-  window.location.href = "/admin/dashboard";
-} else if (userData.roles.includes("VENDOR")) {
-  window.location.href = "/vendor/dashboard";
-} else {
-  window.location.href = "/customer/dashboard";
-}
-     
-      
-    } catch (err: any) {
-      console.error("Login Error:", err);
-      alert("Login failed. Please try again.");
+    const loginData = await login(email, password);
+
+    console.log("Login Response:", loginData);
+
+    const accessToken =
+      loginData?.accessToken ||
+      loginData?.data?.accessToken;
+
+    const userData =
+      loginData?.user ||
+      loginData?.data;
+
+    if (!accessToken) {
+      alert("Login failed - No token received");
+      return;
     }
-  };
+
+    // SAVE TOKEN
+    localStorage.setItem(
+      "ACCESS_TOKEN",
+      accessToken
+    );
+
+    // SAVE USER
+    localStorage.setItem(
+      "user",
+      JSON.stringify(userData)
+    );
+
+    setUser(userData);
+
+    // REDIRECT
+    if (userData.roles.includes("ADMIN")) {
+
+      window.location.href = "/admin/dashboard";
+
+    } else if (userData.roles.includes("VENDOR")) {
+
+      window.location.href = "/vendor/dashboard";
+
+    } else {
+
+      window.location.href = "/customer/dashboard";
+
+    }
+
+  } catch (err: any) {
+
+    console.error("Login Error:", err);
+
+    alert("Login failed. Please try again.");
+
+  }
+
+};
 
   return (
     <div className="min-h-screen w-full flex flex-row font-sans">
