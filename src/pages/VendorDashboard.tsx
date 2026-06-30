@@ -838,47 +838,30 @@ const VendorDashboard = () => {
   };
 
 const fetchAiAttributes = async (category: string) => {
-try {
-setAiLoading(true);
+  try {
+    const res = await fetch(
+      "https://your-backend-url/api/v1/ai/generate-attributes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ category }),
+      }
+    );
 
-const res = await fetch(
-  `${API_URL}/ai/generate-attributes`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ category }),
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.log("ERROR:", data);
+      return;
+    }
+
+    console.log("AI RESULT:", data.attributes);
+  } catch (err) {
+    console.log("FETCH ERROR:", err);
   }
-);
-
-const data = await res.json();
-
-if (res.ok && data.success) {
-  setAiAttributes(data.attributes || []);
-} else {
-  console.error(data);
-
-  showNotification(
-    data?.message || "AI fetch failed",
-    "error"
-  );
-}
-
-} catch (err) {
-console.error("AI Fetch Error:", err);
-
-showNotification(
-  "Failed to load AI suggestions",
-  "error"
-);
-
-} finally {
-setAiLoading(false);
-}
 };
-
 
   // LOADING
   if (loading) {
