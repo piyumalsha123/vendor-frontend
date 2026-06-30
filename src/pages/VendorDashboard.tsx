@@ -491,6 +491,8 @@ const VendorDashboard = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  const [aiLoading, setAiLoading] = useState(false);
+
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
@@ -836,23 +838,47 @@ const VendorDashboard = () => {
   };
 
 const fetchAiAttributes = async (category: string) => {
-  try {
-    const res = await fetch(`${API_URL}/ai/generate-attributes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ category }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      setAiAttributes(data.attributes);
-    }
-  } catch (err) {
-    console.error("AI Fetch Error:", err);
+try {
+setAiLoading(true);
+
+const res = await fetch(
+  `${API_URL}/ai/generate-attributes`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ category }),
   }
+);
+
+const data = await res.json();
+
+if (res.ok && data.success) {
+  setAiAttributes(data.attributes || []);
+} else {
+  console.error(data);
+
+  showNotification(
+    data?.message || "AI fetch failed",
+    "error"
+  );
+}
+
+} catch (err) {
+console.error("AI Fetch Error:", err);
+
+showNotification(
+  "Failed to load AI suggestions",
+  "error"
+);
+
+} finally {
+setAiLoading(false);
+}
 };
+
 
   // LOADING
   if (loading) {
@@ -1095,52 +1121,56 @@ const fetchAiAttributes = async (category: string) => {
     Store Attributes (AI Suggested)
   </label>
 
-  <div className="flex flex-wrap gap-2">
-    {/* AI වෙතින් දත්ත එනතුරු Loading පෙන්වීම */}
-    {aiAttributes.length === 0 ? (
-      <p className="text-xs text-[#8B5E3C] italic">Loading AI suggestions...</p>
-    ) : (
-      aiAttributes.map((attr) => {
-        const selected = storeDetails.customAttributes
-          .split(",")
-          .map((item) => item.trim())
-          .includes(attr);
+ <div className="flex flex-wrap gap-2">
 
-        return (
-          <label
-            key={attr}
-            className={`px-3 py-2 rounded-lg cursor-pointer text-xs font-bold border transition-all ${
-              selected
-                ? "bg-[#2D2A26] text-white border-[#2D2A26]"
-                : "bg-[#F3EFE7] border-[#D4C4A8] hover:border-[#8B5E3C]"
-            }`}
-          >
-            <input
-              type="checkbox"
-              className="hidden"
-              checked={selected}
-              onChange={(e) => {
-                const current = storeDetails.customAttributes
-                  .split(",")
-                  .map((item) => item.trim())
-                  .filter(Boolean);
+{aiLoading ? ( <p className="text-xs text-[#8B5E3C] italic">
+Loading AI suggestions... </p>
+) : aiAttributes.length === 0 ? ( <p className="text-xs text-red-500 italic">
+No AI suggestions found </p>
+) : (
+aiAttributes.map((attr) => {
+const selected = storeDetails.customAttributes
+.split(",")
+.map((item) => item.trim())
+.includes(attr);
 
-                const updatedAttributes = e.target.checked
-                  ? [...current, attr]
-                  : current.filter((i) => i !== attr);
+  return (
+    <label
+      key={attr}
+      className={`px-3 py-2 rounded-lg cursor-pointer text-xs font-bold border transition-all ${
+        selected
+          ? "bg-[#2D2A26] text-white border-[#2D2A26]"
+          : "bg-[#F3EFE7] border-[#D4C4A8] hover:border-[#8B5E3C]"
+      }`}
+    >
+      <input
+        type="checkbox"
+        className="hidden"
+        checked={selected}
+        onChange={(e) => {
+          const current = storeDetails.customAttributes
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
 
-                setStoreDetails({
-                  ...storeDetails,
-                  customAttributes: updatedAttributes.join(", "),
-                });
-              }}
-            />
-            {attr}
-          </label>
-        );
-      })
-    )}
-  </div>
+          const updatedAttributes = e.target.checked
+            ? [...current, attr]
+            : current.filter((i) => i !== attr);
+
+          setStoreDetails({
+            ...storeDetails,
+            customAttributes:
+              updatedAttributes.join(", "),
+          });
+        }}
+      />
+
+      {attr}
+    </label>
+  );
+})
+)}
+</div>
 </div>
 
             {/* DELIVERY */}
