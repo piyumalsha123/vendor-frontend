@@ -536,18 +536,20 @@ const VendorDashboard = () => {
     "Other",
   ];
 
-  const suggestedAttributes = [
-    "Color",
-    "Size",
-    "Material",
-    "Style",
-    "Weight",
-    "Brand",
-    "Pattern",
-    "Occasion",
-    "Length",
-    "Care Instructions",
-  ];
+  // const suggestedAttributes = [
+  //   "Color",
+  //   "Size",
+  //   "Material",
+  //   "Style",
+  //   "Weight",
+  //   "Brand",
+  //   "Pattern",
+  //   "Occasion",
+  //   "Length",
+  //   "Care Instructions",
+  // ];
+
+  const [aiAttributes, setAiAttributes] = useState<string[]>([]);
 
   const showNotification = (
     message: string,
@@ -833,6 +835,25 @@ const VendorDashboard = () => {
     }
   };
 
+const fetchAiAttributes = async (category: string) => {
+  try {
+    const res = await fetch(`${API_URL}/ai/generate-attributes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ category }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setAiAttributes(data.attributes);
+    }
+  } catch (err) {
+    console.error("AI Fetch Error:", err);
+  }
+};
+
   // LOADING
   if (loading) {
     return (
@@ -943,9 +964,10 @@ const VendorDashboard = () => {
         </div>
 
         <button
-          onClick={() =>
-            setIsEditModalOpen(true)
-          }
+  onClick={() => {
+    setIsEditModalOpen(true);
+    if (selectedCategory) fetchAiAttributes(selectedCategory);
+  }}
           className="text-sm text-[#4A3728] font-bold underline hover:text-[#8B5E3C]"
         >
           Edit Store Details
@@ -1067,75 +1089,59 @@ const VendorDashboard = () => {
               Store Configuration
             </h2>
 
-            {/* ATTRIBUTES */}
-            <div className="mb-6">
+{/* ATTRIBUTES SECTION */}
+<div className="mb-6">
+  <label className="block text-sm font-bold mb-3 text-[#4A3728]">
+    Store Attributes (AI Suggested)
+  </label>
 
-              <label className="block text-sm font-bold mb-3 text-[#4A3728]">
-                Store Attributes
-              </label>
+  <div className="flex flex-wrap gap-2">
+    {/* AI වෙතින් දත්ත එනතුරු Loading පෙන්වීම */}
+    {aiAttributes.length === 0 ? (
+      <p className="text-xs text-[#8B5E3C] italic">Loading AI suggestions...</p>
+    ) : (
+      aiAttributes.map((attr) => {
+        const selected = storeDetails.customAttributes
+          .split(",")
+          .map((item) => item.trim())
+          .includes(attr);
 
-              <div className="flex flex-wrap gap-2">
+        return (
+          <label
+            key={attr}
+            className={`px-3 py-2 rounded-lg cursor-pointer text-xs font-bold border transition-all ${
+              selected
+                ? "bg-[#2D2A26] text-white border-[#2D2A26]"
+                : "bg-[#F3EFE7] border-[#D4C4A8] hover:border-[#8B5E3C]"
+            }`}
+          >
+            <input
+              type="checkbox"
+              className="hidden"
+              checked={selected}
+              onChange={(e) => {
+                const current = storeDetails.customAttributes
+                  .split(",")
+                  .map((item) => item.trim())
+                  .filter(Boolean);
 
-                {suggestedAttributes.map((attr) => {
-                  const selected =
-                    storeDetails.customAttributes
-                      .split(",")
-                      .map((item) =>
-                        item.trim()
-                      )
-                      .includes(attr);
+                const updatedAttributes = e.target.checked
+                  ? [...current, attr]
+                  : current.filter((i) => i !== attr);
 
-                  return (
-                    <label
-                      key={attr}
-                      className={`px-3 py-2 rounded-lg cursor-pointer text-xs font-bold border ${
-                        selected
-                          ? "bg-[#2D2A26] text-white border-[#2D2A26]"
-                          : "bg-[#F3EFE7] border-[#D4C4A8]"
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        className="hidden"
-                        checked={selected}
-                        onChange={(e) => {
-                          const current =
-                            storeDetails.customAttributes
-                              .split(",")
-                              .map((item) =>
-                                item.trim()
-                              )
-                              .filter(Boolean);
-
-                          if (e.target.checked) {
-                            setStoreDetails({
-                              ...storeDetails,
-                              customAttributes: [
-                                ...current,
-                                attr,
-                              ].join(", "),
-                            });
-                          } else {
-                            setStoreDetails({
-                              ...storeDetails,
-                              customAttributes:
-                                current
-                                  .filter(
-                                    (i) =>
-                                      i !== attr
-                                  )
-                                  .join(", "),
-                            });
-                          }
-                        }}
-                      />
-
-                      {attr}
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
+                setStoreDetails({
+                  ...storeDetails,
+                  customAttributes: updatedAttributes.join(", "),
+                });
+              }}
+            />
+            {attr}
+          </label>
+        );
+      })
+    )}
+  </div>
+</div>
 
             {/* DELIVERY */}
             <div className="mb-6">
