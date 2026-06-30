@@ -551,7 +551,7 @@ const VendorDashboard = () => {
   //   "Care Instructions",
   // ];
 
-  const [aiAttributes, setAiAttributes] = useState<string[]>([]);
+   const [aiAttributes, setAiAttributes] = useState<string[]>([]);
 
   const showNotification = (
     message: string,
@@ -837,31 +837,56 @@ const VendorDashboard = () => {
     }
   };
 
-const fetchAiAttributes = async (category: string) => {
+
+const fetchAiAttributes = async (
+  category: string
+) => {
   try {
+    setAiLoading(true);
+
     const res = await fetch(
-      "https://your-backend-url/api/v1/ai/generate-attributes",
+      `${API_URL}/ai/generate-attributes`,
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type":
+            "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ category }),
+        body: JSON.stringify({
+          category,
+        }),
       }
     );
 
     const data = await res.json();
 
-    if (!res.ok) {
-      console.log("ERROR:", data);
-      return;
-    }
+    console.log("AI DATA:", data);
 
-    console.log("AI RESULT:", data.attributes);
+    if (data?.success) {
+      setAiAttributes(
+        data.attributes || []
+      );
+    } else {
+      showNotification(
+        data?.message ||
+          "AI failed",
+        "error"
+      );
+    }
   } catch (err) {
-    console.log("FETCH ERROR:", err);
+    console.log(err);
+
+    showNotification(
+      "AI fetch failed",
+      "error"
+    );
+  } finally {
+    setAiLoading(false);
   }
 };
+
+
 
   // LOADING
   if (loading) {
