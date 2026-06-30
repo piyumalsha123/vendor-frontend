@@ -163,6 +163,18 @@ const getSuggestions = (label: string) => {
   return map[label] || [];
 };
 
+const [selectedCategory, setSelectedCategory] = useState<string>(""); 
+
+const categories = [
+  "Clothing", "Cakes", "Handmade Flowers", "Floral Arrangements", "Plants", 
+  "Bakery & Sweets", "Healthy Snacks", "Handmade Candles", "Home Decor", 
+  "Resin & Craft Art", "Personalized Gifts", "Handmade Soaps", "Beauty & Organic", 
+  "Stationery & Journals", "Fabric Bags", "Jewelry & Accessories", 
+  "Hand-painted Pottery", "Greeting Cards", "Gift Hampers", 
+  "Essential Oil Rollers", "Macrame Wall Decor", "Customized Mugs", 
+  "Hair Care Products", "Other"
+];
+
   return (
     <div className="p-10 bg-[#ccba97] min-h-screen">
       <div className="flex justify-between items-center mb-10">
@@ -213,13 +225,23 @@ const getSuggestions = (label: string) => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Category</label>
-                <select className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setFormData({...formData, category: e.target.value})}>
-                  <option value="clothing">Clothing</option>
-                  <option value="foods">Foods</option>
-                  <option value="flowers">Flowers</option>
-                </select>
-              </div>
+  <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Category</label>
+  <select
+    onChange={(e) => {
+      setSelectedCategory(e.target.value);
+      setFormData({ ...formData, category: e.target.value }); // මෙයද අමතක නොකරන්න
+    }}
+    value={selectedCategory || formData.category}
+    className="w-full border border-[#D4C4A8] rounded-xl px-4 py-3 outline-none"
+  >
+    <option value="" disabled>Select a category</option>
+    {categories.map((cat) => (
+      <option key={cat} value={cat}>
+        {cat}
+      </option>
+    ))}
+  </select>
+</div>
               <div>
                 <label className="text-[10px] font-black uppercase text-[#8B5E3C]">Price</label>
                 <input type="number" className="w-full p-3 mt-1 border-2 border-[#E6DFD3] rounded-2xl" onChange={(e) => setFormData({...formData, price: Number(e.target.value)})} />
