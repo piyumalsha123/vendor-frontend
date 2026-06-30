@@ -13,36 +13,33 @@ const StoreSettings = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  // දත්ත පටවා ගැනීම
   useEffect(() => {
     const fetchSettings = async () => {
-      try {
-        const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/settings", {
-          headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
-        });
-        const data = await res.json();
-        
-        // Console එකේ දත්ත පේනවාදැයි බැලීමට (Debug)
-        console.log("Fetched Store Data:", data);
+  try {
+    const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/settings", {
+      headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
+    });
+    const data = await res.json();
+  
+    console.log("Backend Response:", data); 
 
-        if (res.ok && data) {
-          setStoreData({
-            storeName: data.storeName || "",
-            phone: data.phone || "",
-            logo: data.logo || "",
-            email: data.email || "",      
-            address: data.address || "",  
-            category: data.category || "",
-            customAttributes: Array.isArray(data.customAttributes) ? data.customAttributes.join(", ") : (data.customAttributes || ""),
-            deliveryMethods: Array.isArray(data.deliveryMethods) ? data.deliveryMethods.join(", ") : (data.deliveryMethods || "")
-          });
-        }
-      } catch (err) { console.error("Error fetching settings:", err); }
-    };
+    if (res.ok && data) {
+      setStoreData({
+        storeName: data.storeName || "",
+        phone: data.phone || "",
+        logo: data.logo || "",
+        email: data.email || "",      
+        address: data.address || "",  
+        category: data.category || "",
+        customAttributes: Array.isArray(data.customAttributes) ? data.customAttributes.join(", ") : (data.customAttributes || ""),
+        deliveryMethods: Array.isArray(data.deliveryMethods) ? data.deliveryMethods.join(", ") : (data.deliveryMethods || "")
+      });
+    }
+  } catch (err) { console.error("Error fetching settings:", err); }
+};
     fetchSettings();
   }, []);
 
-  // ලෝගෝව අප්ලෝඩ් කිරීම
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -60,7 +57,6 @@ const StoreSettings = () => {
     } catch (err) { alert("Upload failed"); }
   };
 
-  // සැකසුම් සුරැකීම
   const saveSettings = async () => {
     setLoading(true);
     try {
