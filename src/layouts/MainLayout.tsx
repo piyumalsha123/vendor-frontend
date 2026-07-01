@@ -100,12 +100,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </button>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto pt-20 lg:pt-0 bg-[#FAF9F6]">
-        <div className="max-w-7xl mx-auto p-4 lg:p-12">
-          {children ? children : <Outlet />}
-        </div>
-      </main>
+
+<main className="flex-1 h-screen overflow-hidden flex flex-col pt-20 lg:pt-0 bg-[#FAF9F6]">
+  <div className="flex-1 overflow-hidden p-4 lg:p-12 h-full">
+    {children ? children : <Outlet />}
+  </div>
+</main>
       
       {/* Overlay for Mobile */}
       {isOpen && (
