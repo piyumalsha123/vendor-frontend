@@ -179,12 +179,15 @@ const AdminDashboard = () => {
                   <td className="p-4">{user.name}</td>
                   <td className="p-4">{user.email}</td>
                   <td className="p-4">
-        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-          user.roles?.includes('VENDOR') ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
-        }`}>
-          {user.roles?.includes('VENDOR') ? 'VENDOR' : 'CUSTOMER'}
-        </span>
-      </td>
+  <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+    user.roles?.includes('ADMIN') ? 'bg-red-100 text-red-700' : // ADMIN සඳහා රතු පාට
+    user.roles?.includes('VENDOR') ? 'bg-purple-100 text-purple-700' : 
+    'bg-blue-100 text-blue-700'
+  }`}>
+    {user.roles?.includes('ADMIN') ? 'ADMIN' : 
+     user.roles?.includes('VENDOR') ? 'VENDOR' : 'CUSTOMER'}
+  </span>
+</td>
                   <td className="p-4 flex gap-2">
                     <button onClick={() => toggleBlockUser(user._id)} className={`px-3 py-1 rounded-lg text-white text-sm ${user.approved ? 'bg-red-500' : 'bg-green-500'}`}>{user.approved ? 'Block' : 'Unblock'}</button>
                     <button onClick={() => removeUser(user._id)} className="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm">Remove</button>
