@@ -58,6 +58,28 @@ const MyOrders = () => {
   } catch (err) { console.error(err); }
 };
 
+const deleteOrder = async (e: React.MouseEvent, orderId: string) => {
+  e.stopPropagation(); // Event bubbling වළක්වයි
+  
+  const confirmDelete = window.confirm("Are you sure you want to remove this order from your history?");
+  if (!confirmDelete) return;
+
+  try {
+    // ඔබේ API එකේ delete route එක මෙතැනට දමන්න
+    const res = await fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/orders/${orderId}`, {
+      method: "DELETE",
+      headers: { 'Authorization': `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
+    });
+    
+    if (res.ok) {
+      alert("Order removed successfully!");
+      fetchOrders(); // ලැයිස්තුව නැවත පූරණය කරන්න
+    } else {
+      alert("Failed to delete order.");
+    }
+  } catch (err) { console.error(err); }
+};
+
   if (loading) return <div className="p-8 text-center text-[#4A3728]">Loading your orders...</div>;
 
   return (
@@ -101,7 +123,11 @@ const MyOrders = () => {
       Cancel
     </button>
   ) : (
-    <button className="text-[#A89F91] hover:text-red-600"><FaTrash /></button>
+    <button 
+    onClick={(e) => deleteOrder(e, order.orderId)}
+    className="text-[#A89F91] hover:text-red-600">
+      <FaTrash />
+      </button>
   )}
 </td>
               </tr>
