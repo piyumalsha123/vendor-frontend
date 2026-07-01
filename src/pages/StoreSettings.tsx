@@ -14,14 +14,16 @@ const StoreSettings = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchSettings = async () => {
+  const fetchSettings = async () => {
   try {
     const res = await fetch("https://vendor-backend-kr2j.vercel.app/api/v1/store/settings", {
       headers: { "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` }
     });
+    
+    // Backend එකෙන් එන සම්පූර්ණ JSON දත්තය ලබාගන්න
     const data = await res.json();
-  
-    console.log("Backend Response:", data); 
+    
+    console.log("Backend Response Structure:", data); // මෙතනින් Console එකේ බලන්න දත්ත එන හැටි
 
     if (res.ok && data) {
       setStoreData({
