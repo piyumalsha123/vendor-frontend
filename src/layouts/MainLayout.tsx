@@ -64,17 +64,24 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           </div>
 
           {/* User Profile */}
-          <div className="mb-8 border-b border-black/10 pb-6 flex flex-col items-center">
-            <div className="w-20 h-20 rounded-full bg-[#5C5048] flex items-center justify-center text-white text-2xl font-black mb-3 shadow-md border border-[#D4A373]">
-              {user?.name?.charAt(0).toUpperCase() || "U"}
-            </div>
-            <h2 className={`text-sm uppercase tracking-wide font-black ${textColor} text-center`}>
-              {user?.name || "My Boutique"}
-            </h2>
-            <p className={`text-[10px] uppercase tracking-[0.2em] ${subTextColor} mt-1 font-bold`}>
-              {isVendor ? "Premium Vendor" : "Valued Customer"}
-            </p>
-          </div>
+<div className="mb-4 border-b border-black/10 pb-4 flex flex-col items-center">
+  <div className="w-16 h-16 rounded-full bg-[#5C5048] flex items-center justify-center text-white text-2xl font-black mb-2 shadow-xl border-2 border-[#D4A373] overflow-hidden">
+    {/* මෙතැනදී user.name එකක් තිබේ නම් එහි පළමු අකුර පෙන්වයි */}
+    {user?.name ? (
+      <span className="text-white text-2xl font-black">
+        {user.name.charAt(0).toUpperCase()}
+      </span>
+    ) : (
+      <span className="text-white text-2xl font-black">U</span>
+    )}
+  </div>
+  <h2 className={`text-sm uppercase tracking-wide font-black ${textColor} text-center mt-2`}>
+    {user?.name || "My Boutique"}
+  </h2>
+  <p className={`text-[10px] uppercase tracking-[0.2em] ${subTextColor} mt-1 font-bold`}>
+    {isVendor ? "Premium Vendor" : "Valued Customer"}
+  </p>
+</div>
 
           {/* Nav Links */}
           <nav className="flex-1 space-y-3"> 
