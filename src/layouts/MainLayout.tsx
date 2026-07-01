@@ -56,7 +56,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
       {/* Aside - Sidebar */}
       <aside className={`fixed lg:static w-72 h-full ${asideBg} p-6 flex flex-col justify-between shadow-xl transition-transform duration-300 z-40 ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
-        <div className="flex flex-col flex-1">
+       <div className="flex flex-col flex-1 overflow-y-auto pt-6">
           
           {/* Brand Name */}
           <div className="hidden lg:flex justify-center mb-8">
@@ -64,7 +64,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           </div>
 
           {/* User Profile */}
-<div className="mb-4 border-b border-black/10 pb-4 flex flex-col items-center">
+<div className="mt-4 mb-8 border-b border-black/10 pb-6 flex flex-col items-center">
   <div className="w-16 h-16 rounded-full bg-[#5C5048] flex items-center justify-center text-white text-2xl font-black mb-2 shadow-xl border-2 border-[#D4A373] overflow-hidden">
     {/* මෙතැනදී user.name එකක් තිබේ නම් එහි පළමු අකුර පෙන්වයි */}
     {user?.name ? (
