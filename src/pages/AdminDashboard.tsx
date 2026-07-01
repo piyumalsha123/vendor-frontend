@@ -86,7 +86,7 @@ const AdminDashboard = () => {
     } catch (err) { console.error(err); }
   };
 
-  const removeStore = async (storeId: string) => {
+ const removeStore = async (storeId: string) => {
   if (!window.confirm("Are you sure you want to remove this store?")) return;
   try {
     const res = await fetch(`${API_URL}/admin/stores/${storeId}`, {
@@ -94,13 +94,12 @@ const AdminDashboard = () => {
       headers: { "Authorization": `Bearer ${token}` }
     });
     if (res.ok) {
-      setStores(stores.filter(s => s._id !== storeId));
+      setStores(stores.filter(s => s._id !== storeId)); // දත්ත ලැයිස්තුව යාවත්කාලීන කිරීම
     }
   } catch (err) { 
     console.error("Delete error:", err); 
   }
 };
-  
 
   if (loading) return <div className="p-10 text-center text-xl font-semibold">Loading Admin Panel...</div>;
 
@@ -153,11 +152,11 @@ const AdminDashboard = () => {
         </button>
         
         <button 
-          onClick={() => removeStore(store._id)}
-          className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition"
-        >
-          <FaTrash />
-        </button>
+  onClick={() => removeStore(store._id)}
+  className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition"
+>
+  <FaTrash />
+</button>
       </td>
     </tr>
   ))}
