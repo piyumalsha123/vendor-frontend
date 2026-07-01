@@ -68,10 +68,23 @@ const AdminDashboard = () => {
       method: "PUT",
       headers: { "Authorization": `Bearer ${token}` }
     });
-    if (res.ok) fetchData(); 
-  } catch (err) {
-    console.error("Toggle error:", err);
-  }
+    if (res.ok) {
+        setUsers(users.map(u => u._id === userId ? { ...u, approved: !u.approved } : u));
+    }
+  } catch (err) { console.error(err); }
+};
+
+const removeUser = async (userId: string) => {
+  if (!window.confirm("Are you sure?")) return;
+  try {
+    const res = await fetch(`${API_URL}/admin/users/${userId}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (res.ok) {
+      setUsers(users.filter(u => u._id !== userId));
+    }
+  } catch (err) { console.error(err); }
 };
 
   if (loading) return <div className="p-10 text-center text-xl font-semibold">Loading Admin Panel...</div>;
@@ -111,26 +124,28 @@ const AdminDashboard = () => {
               <tr><th className="p-4">Store & Contact</th><th className="p-4 text-right">Action</th></tr>
             </thead>
             <tbody>
-              {stores.map((store: any) => (
-                <tr key={store._id} className="border-b hover:bg-gray-50 transition">
-                  <td className="p-4">
-                   <Link to={`/store/${store.vendorId?._id || store.vendorId || '#'}`} className="text-blue-600 hover:underline font-bold block">
-        {store.storeName || "Unknown Store"}
-      </Link>
-                    <div className="text-sm text-gray-500">Owner: {store.vendorId?.name || "N/A"}</div>
-                    <div className="text-xs text-blue-500">{store.vendorId?.email}</div>
-                  </td>
-                  <td className="p-4 text-right">
-                    <button 
-                      onClick={() => toggleBlockVendor(store._id)}
-                      className={`px-5 py-2 rounded-lg font-medium text-white ${store.isActive ? 'bg-red-500' : 'bg-green-500'}`}
-                    >
-                      {store.isActive ? 'Block Store' : 'Unblock Store'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {users.map((user: any) => (
+    <tr key={user._id} className="border-b">
+      <td className="p-4">{user.name}</td>
+      <td className="p-4">{user.email}</td>
+      <td className="p-4 flex gap-2"> 
+        <button 
+          onClick={() => toggleBlockUser(user._id)}
+          className={`px-4 py-2 rounded-lg text-white text-sm ${user.approved ? 'bg-red-500' : 'bg-green-500'}`}
+        >
+          {user.approved ? 'Block' : 'Unblock'}
+        </button>
+        
+        <button 
+          onClick={() => removeUser(user._id)}
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300"
+        >
+          Remove
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
           </table>
         </div>
       </div>
