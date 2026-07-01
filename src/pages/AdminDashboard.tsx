@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { FaTrash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -85,6 +86,22 @@ const AdminDashboard = () => {
     } catch (err) { console.error(err); }
   };
 
+  const removeStore = async (storeId: string) => {
+  if (!window.confirm("Are you sure you want to remove this store?")) return;
+  try {
+    const res = await fetch(`${API_URL}/admin/stores/${storeId}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (res.ok) {
+      // සාර්ථකව මැකූ පසු stores ලැයිස්තුව යාවත්කාලීන කරන්න
+      setStores(stores.filter(s => s._id !== storeId));
+    }
+  } catch (err) { 
+    console.error("Delete error:", err); 
+  }
+};
+
   if (loading) return <div className="p-10 text-center text-xl font-semibold">Loading Admin Panel...</div>;
 
   return (
@@ -120,15 +137,21 @@ const AdminDashboard = () => {
             <tbody>
               {stores.map((store: any) => (
                 <tr key={store._id} className="border-b hover:bg-gray-50">
-                  <td className="p-4">
-                    <Link to={`/store/${store.vendorId?._id || store.vendorId}`} className="text-blue-600 font-bold block">{store.storeName}</Link>
-                    <div className="text-xs text-gray-500">Owner: {store.vendorId?.name}</div>
-                  </td>
-                  <td className="p-4 text-right">
-                    <button onClick={() => toggleBlockVendor(store._id)} className={`px-4 py-2 rounded-lg text-white text-sm ${store.isActive ? 'bg-red-500' : 'bg-green-500'}`}>
-                      {store.isActive ? 'Block' : 'Unblock'}
-                    </button>
-                  </td>
+                 <td className="p-4 text-right flex justify-end gap-2"> {/* flex සහ gap මගින් බොත්තම් දෙක පසෙකින් තබයි */}
+  <button 
+    onClick={() => toggleBlockVendor(store._id)} 
+    className={`px-4 py-2 rounded-lg text-white text-sm ${store.isActive ? 'bg-red-500' : 'bg-green-500'}`}
+  >
+    {store.isActive ? 'Block' : 'Unblock'}
+  </button>
+  
+  <button 
+    onClick={() => removeStore(store._id)} // removeStore ශ්‍රිතය අමතන්න
+    className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition"
+  >
+    <FaTrash /> {/* මෙතන අයිකනය දාන්න */}
+  </button>
+</td>
                 </tr>
               ))}
             </tbody>
