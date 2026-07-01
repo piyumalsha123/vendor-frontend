@@ -35,6 +35,29 @@ const MyOrders = () => {
     }
   };
 
+  const cancelOrder = async (e: React.MouseEvent, orderId: string) => {
+  e.stopPropagation();
+  
+  const confirmCancel = window.confirm("Are you sure you want to cancel this order?");
+  if (!confirmCancel) return;
+
+  try {
+    const res = await fetch(`https://vendor-backend-kr2j.vercel.app/api/v1/orders/cancel/${orderId}`, {
+      method: "PATCH",
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem("ACCESS_TOKEN")}`,
+        'Content-Type': 'application/json' 
+      }
+    });
+    if (res.ok) {
+      alert("Order cancelled successfully!");
+      fetchOrders(); 
+    } else {
+      alert("Failed to cancel order.");
+    }
+  } catch (err) { console.error(err); }
+};
+
   if (loading) return <div className="p-8 text-center text-[#4A3728]">Loading your orders...</div>;
 
   return (
@@ -69,13 +92,18 @@ const MyOrders = () => {
                     {order.status}
                   </span>
                 </td>
-                <td className="p-6">
-                  {order.status === 'pending' ? (
-                    <button className="text-red-600 text-xs font-black hover:underline uppercase">Cancel</button>
-                  ) : (
-                    <button className="text-[#A89F91] hover:text-red-600"><FaTrash /></button>
-                  )}
-                </td>
+               <td className="p-6">
+  {order.status === 'pending' ? (
+    <button 
+      onClick={(e) => cancelOrder(e, order.orderId)} 
+      className="text-red-600 text-xs font-black hover:underline uppercase"
+    >
+      Cancel
+    </button>
+  ) : (
+    <button className="text-[#A89F91] hover:text-red-600"><FaTrash /></button>
+  )}
+</td>
               </tr>
             ))}
           </tbody>
