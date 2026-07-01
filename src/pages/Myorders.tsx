@@ -124,10 +124,11 @@ const deleteOrder = async (e: React.MouseEvent, orderId: string) => {
     </button>
   ) : (
     <button 
-    onClick={(e) => deleteOrder(e, order.orderId)}
-    className="text-[#A89F91] hover:text-red-600">
+      onClick={(e) => deleteOrder(e, order._id)} 
+      className="text-[#A89F91] hover:text-red-600"
+    >
       <FaTrash />
-      </button>
+    </button>
   )}
 </td>
               </tr>
