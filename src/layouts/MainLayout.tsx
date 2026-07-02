@@ -55,8 +55,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       </header>
 
       {/* Aside - Sidebar */}
-      <aside className={`fixed lg:static w-72 h-full ${asideBg} p-6 flex flex-col justify-between shadow-xl transition-transform duration-300 z-40 ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
-       <div className="flex flex-col flex-1 overflow-y-auto pt-6">
+      <aside className={`fixed lg:static w-[80vw] lg:w-72 h-screen ${asideBg} flex flex-col justify-between shadow-xl transition-transform duration-300 z-40 ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+      <div className="flex flex-col flex-1 overflow-hidden pt-6">
           
           {/* Brand Name */}
           <div className="hidden lg:flex justify-center mb-8">
